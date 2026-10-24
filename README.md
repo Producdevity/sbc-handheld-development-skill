@@ -19,47 +19,27 @@ supported agent) to choose the destination. Omit those options for interactive
 project installation. The installed skill stays named `handheld-development`.
 Invoke it with `$handheld-development` or ask for Linux handheld port work.
 
-Install directly from a local checkout:
+The command follows the [official installation reference](https://github.com/vercel-labs/skills/blob/main/docs/commands.md#skills-add).
 
-```sh
-npx skills add . --skill handheld-development
-```
-
-These commands follow the [official installation reference](https://github.com/vercel-labs/skills/blob/main/docs/commands.md#skills-add).
-
-The repository uses the standard `skills/handheld-development/` layout. The
-skill folder contains its instructions, references, helpers, tests, examples,
-schemas and Codex UI metadata; repository documentation stays outside it.
+The repository root is the skill directory: `SKILL.md`, references, helpers,
+tests, examples, schemas and Codex UI metadata live alongside this README.
 
 ## Develop from a checkout
 
-Keep one canonical checkout and symlink its entire skill directory into your
-agent's skills directory. For the shared user skills location, starting in
-this repository:
+Keep one real checkout in your agent's skills directory. Point optional workspace
+shortcuts at that checkout so manual and agent edits change the same files.
+
+If the skills directory belongs to a dotfiles repository, use a submodule from
+that repository's root:
 
 ```sh
-mkdir -p "$HOME/.agents/skills"
-ln -s "$PWD/skills/handheld-development" "$HOME/.agents/skills/handheld-development"
+git submodule add -b master git@github.com:Producdevity/sbc-handheld-development-skill.git .agents/skills/handheld-development
 ```
 
-If that destination already exists, preserve it before replacing it. A single
-directory symlink keeps relative references and new helper files working;
-individual file symlinks are unnecessary. If your skills directory is managed
-by dotfiles, place the link in the underlying dotfiles directory instead.
-
-Some agent sandboxes require an installed skills directory to remain a real
-directory. For those environments, keep a real `handheld-development/` directory
-with a regular copy of `SKILL.md`; Codex skips symlinked manifests in this layout.
-Link `LICENSE` and the resource directories to the checkout. Edits and new files
-inside linked directories update immediately. After editing the canonical
-manifest, refresh its installed copy from the repository root:
-
-```sh
-cp skills/handheld-development/SKILL.md "$HOME/.agents/skills/handheld-development/SKILL.md"
-```
-
-Add a link if the skill gains a new top-level resource. Repository-only files
-remain outside the installed skill.
+Preserve an existing installation before converting it. Edit and commit skill
+files inside the submodule; dotfiles tracks `.gitmodules` and the skill's commit
+reference. Keep the installed directory real and `SKILL.md` a regular file
+when required by the agent's sandbox.
 
 ## Requirements
 
@@ -77,7 +57,7 @@ python3 -m venv .venv
 . .venv/bin/activate
 python -m pip install -r requirements-dev.txt
 python tools/validate_skill.py
-python -m unittest discover -s skills/handheld-development/tests -v
+python -m unittest discover -s tests -v
 ```
 
 The checks cover metadata, local links, JSON syntax and host helper behavior.
