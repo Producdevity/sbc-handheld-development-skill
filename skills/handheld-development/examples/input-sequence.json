@@ -1,0 +1,20 @@
+{
+  "$schema": "../schemas/input-sequence.schema.json",
+  "name": "gamepad-input-sequence",
+  "default_hold_ms": 120,
+  "default_timeout_ms": 3000,
+  "max_runtime_ms": 45000,
+  "steps": [
+    {"action": "wait", "duration_ms": 1000},
+    {"action": "tap", "control": "dpad.down", "after_ms": 400},
+    {"action": "tap", "control": "face.south", "after_ms": 1500},
+    {"action": "hold", "control": "face.east", "duration_ms": 800},
+    {
+      "action": "chord",
+      "controls": ["button.back", "button.start"],
+      "duration_ms": 1000
+    },
+    {"action": "axis", "control": "stick.left.x", "value": 1, "duration_ms": 500},
+    {"action": "mark", "name": "sequence-complete"}
+  ]
+}

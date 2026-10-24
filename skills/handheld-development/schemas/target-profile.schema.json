@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Measured handheld input target",
+  "description": "Versioned evidence for one controller path and one input consumer.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "name", "captured_utc", "target", "consumer", "controller", "face_buttons", "evidence"],
+  "properties": {
+    "$schema": {"type": "string"},
+    "schema_version": {"const": 1},
+    "name": {"$ref": "#/$defs/nonempty"},
+    "captured_utc": {"type": "string", "format": "date-time"},
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["device_model", "cfw_name", "cfw_version"],
+      "properties": {
+        "device_model": {"$ref": "#/$defs/nonempty"},
+        "board": {"$ref": "#/$defs/nonempty"},
+        "cfw_name": {"$ref": "#/$defs/nonempty"},
+        "cfw_version": {"$ref": "#/$defs/nonempty"},
+        "cfw_build": {"$ref": "#/$defs/nonempty"},
+        "portmaster_version": {"$ref": "#/$defs/nonempty"}
+      }
+    },
+    "consumer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "input_layer"],
+      "properties": {
+        "name": {"$ref": "#/$defs/nonempty"},
+        "process": {"$ref": "#/$defs/nonempty"},
+        "input_layer": {
+          "enum": ["evdev", "linux-joystick", "sdl-joystick", "sdl-gamecontroller", "keyboard", "other"]
+        },
+        "sdl_library_sha256": {"$ref": "#/$defs/sha256"},
+        "sdl_mapping": {"$ref": "#/$defs/nonempty"}
+      }
+    },
+    "controller": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": {"$ref": "#/$defs/nonempty"},
+        "event_path": {"$ref": "#/$defs/nonempty"},
+        "guid": {"type": "string", "pattern": "^[0-9A-Fa-f]{32}$"},
+        "bus": {"$ref": "#/$defs/nonempty"},
+        "vendor": {"$ref": "#/$defs/nonempty"},
+        "product": {"$ref": "#/$defs/nonempty"},
+        "version": {"$ref": "#/$defs/nonempty"}
+      }
+    },
+    "layout_settings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source", "value"],
+        "properties": {
+          "source": {"$ref": "#/$defs/nonempty"},
+          "value": {"$ref": "#/$defs/nonempty"}
+        }
+      }
+    },
+    "face_buttons": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["south", "east", "north", "west"],
+      "properties": {
+        "south": {"$ref": "#/$defs/face_button"},
+        "east": {"$ref": "#/$defs/face_button"},
+        "north": {"$ref": "#/$defs/face_button"},
+        "west": {"$ref": "#/$defs/face_button"}
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "reference"],
+        "properties": {
+          "kind": {"enum": ["source", "probe", "process-environment", "observation"]},
+          "reference": {"$ref": "#/$defs/nonempty"},
+          "sha256": {"$ref": "#/$defs/sha256"},
+          "note": {"$ref": "#/$defs/nonempty"}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "nonempty": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+    "sha256": {"type": "string", "pattern": "^[0-9A-Fa-f]{64}$"},
+    "face_button": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["printed_label", "evdev_code", "consumer_value"],
+      "properties": {
+        "printed_label": {"$ref": "#/$defs/nonempty"},
+        "evdev_code": {"type": "string", "pattern": "^BTN_[A-Z0-9_]+$"},
+        "consumer_index": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Index in the consumer input layer; omit when that layer is not index-based."
+        },
+        "consumer_value": {"$ref": "#/$defs/nonempty"}
+      }
+    }
+  }
+}

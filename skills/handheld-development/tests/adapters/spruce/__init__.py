@@ -1,0 +1,1 @@
+"""SpruceOS adapter tests."""

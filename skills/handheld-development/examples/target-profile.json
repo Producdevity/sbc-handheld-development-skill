@@ -1,0 +1,47 @@
+{
+  "$schema": "../schemas/target-profile.schema.json",
+  "schema_version": 1,
+  "name": "example-frontend-input-path",
+  "captured_utc": "2026-01-01T00:00:00Z",
+  "target": {
+    "device_model": "Replace with measured model",
+    "cfw_name": "Replace with installed CFW",
+    "cfw_version": "Replace with installed version"
+  },
+  "consumer": {
+    "name": "Replace with frontend or application",
+    "input_layer": "sdl-gamecontroller",
+    "sdl_mapping": "Replace with the effective mapping"
+  },
+  "controller": {
+    "name": "Replace with measured controller name"
+  },
+  "face_buttons": {
+    "south": {
+      "printed_label": "B",
+      "evdev_code": "BTN_SOUTH",
+      "consumer_value": "Replace with observed value"
+    },
+    "east": {
+      "printed_label": "A",
+      "evdev_code": "BTN_EAST",
+      "consumer_value": "Replace with observed value"
+    },
+    "north": {
+      "printed_label": "X",
+      "evdev_code": "BTN_NORTH",
+      "consumer_value": "Replace with observed value"
+    },
+    "west": {
+      "printed_label": "Y",
+      "evdev_code": "BTN_WEST",
+      "consumer_value": "Replace with observed value"
+    }
+  },
+  "evidence": [
+    {
+      "kind": "probe",
+      "reference": "Replace with a project-relative evidence path"
+    }
+  ]
+}

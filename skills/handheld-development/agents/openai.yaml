@@ -1,0 +1,4 @@
+interface:
+  display_name: "Handheld Development"
+  short_description: "Build and debug Linux handheld ports"
+  default_prompt: "Use $handheld-development to develop, package, debug, or validate this Linux handheld port or app."

@@ -1,0 +1,13 @@
+{
+  "$schema": "../schemas/input-sequence.schema.json",
+  "name": "move-and-click",
+  "default_hold_ms": 100,
+  "default_timeout_ms": 3000,
+  "max_runtime_ms": 10000,
+  "steps": [
+    {"action": "move", "control": "pointer.x", "value": 20},
+    {"action": "move", "control": "pointer.y", "value": 10, "after_ms": 250},
+    {"action": "tap", "control": "pointer.primary"},
+    {"action": "mark", "name": "sequence-complete"}
+  ]
+}

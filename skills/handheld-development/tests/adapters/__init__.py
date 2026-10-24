@@ -1,0 +1,1 @@
+"""CFW adapter tests."""

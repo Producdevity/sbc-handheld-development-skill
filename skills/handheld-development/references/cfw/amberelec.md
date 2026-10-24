@@ -1,0 +1,64 @@
+# AmberELEC device operations
+
+Inspect the installed release and device profile before using RG351MP or R36S
+paths. Community R36S images can report different hardware and firmware
+identities at different layers.
+
+## Access and frontend lifecycle
+
+Enable SSH under **Main Menu -> Network Settings -> Enable SSH**. Official
+images use `root` with the default password `amberelec`; upgraded 351ELEC
+installations may still use `351elec`. The root filesystem is read-only and
+`/storage` is persistent. Root's home is `/storage`, so authorized keys belong
+under `/storage/.ssh`; apply `0700` to the directory and `0600` to the file,
+then verify batch-mode login.
+
+AmberELEC manages EmulationStation with `emustation.service`, not
+`emulationstation.service`. Normal launches run through EmulationStation and
+`/usr/bin/runemu.py`. For an explicitly authorized isolated test, use the
+installed unit's stop/start lifecycle, then verify the unit, process, and
+framebuffer. Do not launch EmulationStation directly.
+
+On a measured R36S prerelease image, the device tree identified R35S/R36S while
+the AmberELEC image profile, hostname, and `/storage/.config/.OS_ARCH`
+identified RG351MP. PortMaster therefore reported `DEVICE_NAME=RG351MP`.
+Record both layers. The installed PortMaster paths were
+`/storage/roms/ports/PortMaster` and its `/roms/ports/PortMaster` alias;
+`fbgrab` captured the active 640x480 framebuffer.
+
+The measured frontend path was:
+
+```text
+EmulationStation -> runemu.py -> /storage/roms/ports/PortMaster.sh -> pugwash
+```
+
+PortMaster returned to the Ports list. Its launcher logged a failed attempt to
+restart the absent `oga_events.service`, but EmulationStation remained active.
+Treat that warning as installed PortMaster behavior, not proof of failed
+restoration.
+
+## RK3326 input profile
+
+On that R36S build, a generic keyboard arrow opened EmulationStation's input
+configuration instead of navigating. The frontend accepted the
+`rk3326-go-super` profile from
+[`semantic_input.c`](../../scripts/semantic_input.c) because it matched the
+installed controller. Use it only while the physical device reports:
+
+```text
+name=GO-Super Gamepad
+bus=0019 vendor=484b product=1100 version=0100
+axes=ABS_X,ABS_Y,ABS_RX,ABS_RY range=-1800..1800 fuzz=32 flat=32
+```
+
+Also compare `/storage/.config/emulationstation/es_input.cfg`, the legacy
+joystick maps, and SDL's live mapping. EmulationStation and a PortMaster
+application can assign different actions to the same raw button. Keep each
+press and release in one bounded remote action and remove the cloned device
+before reporting success.
+
+Official references:
+
+- [AmberELEC network access and credentials](https://amberelec.org/guides/getting-to-know-amberelec.html#accessing-the-handheld-over-a-network)
+- [AmberELEC menu reference](https://amberelec.org/guides/menus)
+- [AmberELEC supported devices](https://github.com/AmberELEC/AmberELEC#supported-devices)
