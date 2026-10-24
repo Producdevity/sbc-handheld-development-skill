@@ -65,6 +65,16 @@ Use application-visible results or SDL event traces. Raw evdev output alone prov
 - Distinguish renderer cadence, game update cadence, input polling, and display refresh.
 - Retain numerical frame/queue/latency metrics for streaming or media work.
 
+## Clock controls
+
+Record governors, frequency limits and thermal cooling states before and after
+measurements. A [CPUFreq policy maximum](https://github.com/torvalds/linux/blob/v4.4/drivers/cpufreq/cpufreq.c#L560-L620)
+may include a thermal constraint; writing it back can retain that cap as a user
+limit after cooling. For fixed-clock tests, prefer a supported
+[userspace frequency request](https://docs.kernel.org/admin-guide/pm/cpufreq.html#userspace),
+preserve policy limits and thermal protection, and restore prior settings.
+Verify attained clocks and distinguish controlled-clock results from stock behavior.
+
 ## Audio gates
 
 - Confirm device/server selection and sample format.
