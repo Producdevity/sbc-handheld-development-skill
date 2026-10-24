@@ -28,6 +28,12 @@ frontend's actual input configuration before using the measured profile from
 [AmberELEC](amberelec.md#rk3326-input-profile). Shared hardware does not imply
 identical SDL mappings or frontend actions.
 
+When injecting axes into a physical evdev node, a polling driver can replace
+the injected value and fuzz filtering can discard repeated samples. If this
+occurs, use bounded, varying samples within the measured range, then restore
+the measured neutral value. Verify motion in SDL or the game; repeated pulses
+do not establish a continuously held stick.
+
 Inspect ALSA controls before muting. Some RK817 codecs expose a volume-only
 `Playback` control and a separate `Playback Path` enum with `OFF`, `SPK`, `HP`
 and `SPK_HP`. Do not assume the H700 `SPK` switch or PulseAudio exists. Record

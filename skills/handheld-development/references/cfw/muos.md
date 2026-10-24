@@ -39,6 +39,12 @@ Official upstream references:
 - [MustardOS frontend input snapshot](https://github.com/MustardOS/frontend/blob/876f00d5499a2f6a5e76e52c2b711b478980feb2/common/platform/input.c)
 - [MustardOS control schemes](https://muos.dev/tour/modules/muxcontrol)
 
+The [dispatcher snapshot](https://github.com/MustardOS/internal/blob/41c21d10127120ffc10a57ead83bbe01eb1625c7/script/var/boot.sh#L242-L268)
+waits for `SAFE_QUIT` after its frontend child exits. If an owned isolated
+diagnostic stopped that child, resuming the parent alone can leave it waiting.
+Inspect the installed dispatcher, complete only its confirmed exit handshake
+during cleanup, and verify a responsive frontend. Handshake paths vary by build.
+
 ## Resolve controller semantics
 
 Keep these paths separate:
