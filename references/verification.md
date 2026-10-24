@@ -65,6 +65,11 @@ Use application-visible results or SDL event traces. Raw evdev output alone prov
 - Distinguish renderer cadence, game update cadence, input polling, and display refresh.
 - Retain numerical frame/queue/latency metrics for streaming or media work.
 
+Keep frequently polled diagnostic control files on a
+[verified tmpfs](https://docs.kernel.org/filesystems/tmpfs.html).
+Rate-limit or remove polling, including file open/close operations, during
+benchmarks. Validate a clean launch separately from the instrumented run.
+
 ## Clock controls
 
 Record governors, frequency limits and thermal cooling states before and after
