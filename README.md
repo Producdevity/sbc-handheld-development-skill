@@ -26,7 +26,7 @@ tests, examples, schemas and Codex UI metadata live alongside this README.
 
 ## Develop from a checkout
 
-Keep one real checkout in your agent's skills directory. Point optional workspace
+Keep one checkout in your agent's skills directory. Point optional workspace
 shortcuts at that checkout so manual and agent edits change the same files.
 
 If the skills directory belongs to a dotfiles repository, use a submodule from
