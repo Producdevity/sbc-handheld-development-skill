@@ -73,6 +73,31 @@ variables; do not dump credentials from the process environment.
 
 These sources are complementary. Exact cloning is useful for one measured device. A generic controller is better for portable SDL behavior. A profile with unusual axes is appropriate for normalization tests. Keep the profiles and their evidence separate.
 
+## Navigate with feedback
+
+Choose the cheapest observation that establishes the required state:
+
+1. Use a verified frontend or application command interface when it supports the
+   operation and preserves the required launch lifecycle.
+2. Otherwise, use available menu identifiers, selected-item text, focus, logs or
+   application-owned state queries to guide controller input. A custom binary
+   observer must match the exact installed build; it is not a portable CFW API.
+3. Once a route works, batch its short input sequence from a known starting
+   state, then verify the destination. Keep timing-sensitive replay in one
+   process or persistent transport. Stop and inspect an unexpected result
+   instead of continuing a guessed sequence.
+
+Capture the first unfamiliar screen, visual defects, changed layouts and
+unexpected states. Routine traversal of an established route does not need a
+capture after every press. Use a bounded readiness check, such as the expected
+menu or loaded level, rather than assuming a live process or a fixed delay
+means the destination is ready.
+
+A direct level/load command can set up a renderer test where the application
+supports it. It does not verify controller navigation or menu behavior; retain
+separate input tests for those requirements. Likewise, game-state readers do
+not establish that the firmware frontend accepts the same input source.
+
 ## Helper commands
 
 Read [input-service.md](input-service.md) when building a semantic device,
@@ -87,6 +112,8 @@ before creating a device or replaying inputs.
 - [SpruceOS on Miyoo Flip](cfw/spruce.md) documents the measured PyUI event
   path and recovery-only `release-all` helper. Use its verified remote
   handoff or physical controls for frontend navigation.
+- [dArkOS](cfw/darkos.md#programmatic-navigation) distinguishes frontend
+  navigation, application state readers and isolated diagnostic launches.
 - [AmberELEC](cfw/amberelec.md) documents the measured RK3326 GO-Super profile
   and its frontend limitations.
 

@@ -21,6 +21,32 @@ A missing CFW module alone does not prove an incompatible installation.
 Resolve this through PortMaster's supported initialization/update path rather
 than adding device-specific replacements to every port.
 
+## Programmatic navigation
+
+Discover command interfaces in the installed frontend before replaying menus.
+Do not assume KNULLI's HTTP launch service exists on dArkOS. The audited FCAMOD
+[startup code](https://github.com/christianhaitian/EmulationStation-fcamod/blob/c4809d8ef33159385a2d516b4b3aec832f4ce2e8/es-app/src/views/ViewController.cpp)
+selects a system or game list; those startup settings do not launch a named
+port. Its `game-start` and `game-end` scripts are lifecycle notifications, not
+an external launch API. Check the actual fork/version before applying this.
+
+For a verified menu route, use a bounded input sequence and check arrival,
+rather than capturing after every button. The frontend's
+[input handler](https://github.com/christianhaitian/EmulationStation-fcamod/blob/c4809d8ef33159385a2d516b4b3aec832f4ce2e8/es-core/src/InputManager.cpp)
+uses SDL joystick events and its own bindings and axis threshold crossings.
+An evdev injector that works in a game does not prove frontend compatibility.
+If navigation is ignored, check the frontend's loaded SDL, input backend,
+configuration and observed values before retrying the same route.
+
+For repeated application tests without a verified frontend launch interface,
+use an authorized isolated service stop/restore diagnostic. Preserve the
+normal account and required environment, and inspect the complete configured
+launch command: governor, priority, audio and lifecycle wrappers may surround
+the port script. A bare SSH invocation omits those steps and does not prove
+normal frontend behavior. Keep the measured launch recipe and state observers
+in the project's ignored files; return to the normal frontend for integration
+checks.
+
 ## Input, audio and storage
 
 RK3326 images may expose `GO-Super Gamepad`; verify its IDs, axes and the

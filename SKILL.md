@@ -72,7 +72,9 @@ Name controls by position, such as `face.south`, `shoulder.left` or
 Use the [input workflow](references/input-automation.md) before injection and
 [helper API](references/input-service.md) for semantic devices or timed plans.
 Choose measured evemu replay, a verified virtual-device profile or the
-application's input path for the actual experiment.
+application's input path for the actual experiment. Prefer
+[state feedback and bounded input sequences](references/input-automation.md#navigate-with-feedback)
+for routine navigation; capture images when the visual result matters.
 
 Keep reusable tools in ignored project `.agents/tools/` or `.agents/input/`,
 and plans/results in `.agents/evidence/`. Device `/tmp` is for deployed helpers

@@ -94,6 +94,17 @@ before showing or publishing them. Discard the unused alpha; compositing onto
 a background would darken the original pixels. Inspect the normalized image
 and show it with an absolute-path Markdown image embed.
 
+Treat capture-process completion and image validity as separate checks. An
+FFmpeg single-frame capture can write a complete PNG before the process exits.
+Use a bounded timeout and a unique output path; verify decoding and freshness
+before accepting or rejecting the image.
+
+For repeated diagnostics on a proven live fbdev source, a read-only copy of
+the active framebuffer page followed by host-side encoding avoids probe and
+encoder overhead. Check dimensions, pixel layout, stride and mapping bounds,
+and verify that the active page offset stayed unchanged during the copy.
+This is not a substitute for identifying the active compositor or DRM plane.
+
 An immediate black capture can also be a normal startup frame. If the process chain is healthy, take a short bounded series of delayed captures before changing launch or capture methods. Record each timestamp; do not silently discard the early frame.
 
 The available method changes by firmware version. `fbgrab` worked on specific muOS and KNULLI H700 builds. Older muOS builds exposed PNG capture as `mufbset -g`, while current builds may use the same name only for display-mode configuration. Check the installed command's help before using `-g`. ROCKNIX uses Sway-aware handling. SpruceOS on Miyoo Flip provides a KMS/FFmpeg screenshot helper.
