@@ -73,6 +73,61 @@ Prefer two explicit paths:
 
 Do not use `rsync --delete` without narrow excludes for user-owned data. Do not treat a direct file sync as proof that a fresh PortMaster installation works.
 
+### Resolve the autoinstall queue
+
+PortMaster's launcher defines the queues, normally `$controlfolder/autoinstall`
+and `/$directory/ports/autoinstall`. CFWs supply installation and storage defaults;
+the installed launcher is authoritative. Common control-folder queues are:
+
+| Firmware/integration | Common autoinstall directory |
+| --- | --- |
+| KNULLI | `/userdata/system/.local/share/PortMaster/autoinstall` |
+| muOS | `/mnt/mmc/MUOS/PortMaster/autoinstall` |
+| ROCKNIX / AmberELEC | `/roms/ports/PortMaster/autoinstall` (often also accessible under `/storage/roms`) |
+| ArkOS / dArkOS variants | `/roms/tools/PortMaster/autoinstall`, the second-card `/roms2/tools` equivalent, or `/opt/system/Tools/PortMaster/autoinstall` |
+| SpruceOS on Miyoo Flip | `/mnt/SDCARD/Persistent/portmaster/PortMaster/autoinstall` |
+
+Use [resolve_portmaster_autoinstall.sh](../scripts/resolve_portmaster_autoinstall.sh)
+for bounded, read-only discovery on the target:
+
+```sh
+ssh -o BatchMode=yes -o ConnectTimeout=8 HOST sh -s < "$SKILL_DIR/scripts/resolve_portmaster_autoinstall.sh"
+```
+
+It checks known installation directories for a readable `control.txt`, treats
+symlink/bind-mount aliases of the same installation as one, and returns its
+existing writable `autoinstall` queue. It does not source `control.txt`, run
+device-info probes, create directories, or launch anything. Multiple distinct
+installations fail instead of selecting an arbitrary one. If the queue is
+missing, initialize PortMaster through the firmware frontend.
+
+Discovery stays in this skill. Resolve the queue for the chosen host, then pass
+the result explicitly to a project deploy script that accepts
+`PORTMASTER_AUTOINSTALL`:
+
+```sh
+host=YOUR_SSH_HOST
+queue=$(ssh -o BatchMode=yes -o ConnectTimeout=8 "$host" sh -s \
+  < "$SKILL_DIR/scripts/resolve_portmaster_autoinstall.sh") || exit 1
+PORTMASTER_AUTOINSTALL="$queue" scripts/deploy.sh "$host" build/bioshock.zip
+```
+
+Keep discovery and deployment as separate commands so failed discovery stops
+before uploading. Project scripts validate the supplied destination and upload;
+they do not need the skill installed, a copied resolver, or a host-to-path
+configuration file. Keep firmware defaults and discovery logic here rather
+than duplicating them in individual ports.
+
+An explicit absolute queue argument to the resolver bypasses discovery for
+custom layouts or another queue supported by the installed launcher. Validate
+any supplied destination before interpolating it into an SSH command. Keep
+actual device-specific exceptions in project-local notes rather than adding
+generated files to global dotfiles.
+
+The [upstream generic launcher](https://github.com/PortsMaster/PortMaster-GUI/blob/main/PortMaster/PortMaster.sh)
+selects the control folder; [its shared launch hooks](https://github.com/PortsMaster/PortMaster-GUI/blob/main/PortMaster/utils/pm_launch.txt)
+define the default queues. Firmware-specific launchers may override them.
+
 ### SpruceOS
 
 SpruceOS's PortMaster integration is unofficial and its own documentation describes port compatibility as hit-or-miss. On Miyoo Flip, the current launcher keeps PortMaster under `/mnt/SDCARD/Persistent/portmaster`, ports under `/mnt/SDCARD/Roms/PORTS`, and its home under `/mnt/SDCARD/Saves/flip/home`. It replaces generated `control.txt` files when PortMaster starts, so change the source integration or the port itself, not a generated copy. Verify input, architecture, libraries, and frontend return on the device before claiming support.
