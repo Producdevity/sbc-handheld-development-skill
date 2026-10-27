@@ -64,6 +64,7 @@ if command -v getconf >/dev/null 2>&1; then
 fi
 show_file device_model /proc/device-tree/model
 show_file device_compatible /proc/device-tree/compatible
+show_file cpu_online /sys/devices/system/cpu/online
 show_file miyoo_firmware /usr/miyoo/version
 if [ -d /mnt/SDCARD/spruce ]; then
   printf 'spruce_root=/mnt/SDCARD/spruce\n'

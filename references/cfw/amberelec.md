@@ -38,6 +38,12 @@ launch enters the normal frontend path. Verify the installed API first.
 New ports may need **Start -> Game Settings -> Update Gamelists** before
 appearing in the frontend.
 
+The installed `screensaver.sh` watches the physical controller node. Its idle
+timeout can offline CPU cores even while a patcher is busy; virtual-pad input
+does not reset it. Use measured physical-node activity for long tests and check
+the online CPU mask. On the measured build, wake restored cores 2/3 but left
+core 1 offline.
+
 PortMaster returned to the Ports list. Its launcher logged a failed attempt to
 restart the absent `oga_events.service`, but EmulationStation remained active.
 Treat that warning as installed PortMaster behavior, not proof of failed

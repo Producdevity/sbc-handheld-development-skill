@@ -72,8 +72,8 @@ benchmarks. Validate a clean launch separately from the instrumented run.
 
 ## Clock controls
 
-Record governors, frequency limits and thermal cooling states before and after
-measurements. A [CPUFreq policy maximum](https://github.com/torvalds/linux/blob/v4.4/drivers/cpufreq/cpufreq.c#L560-L620)
+Record online CPUs, process affinity, governors, frequency limits and thermal
+cooling states before and after measurements. A [CPUFreq policy maximum](https://github.com/torvalds/linux/blob/v4.4/drivers/cpufreq/cpufreq.c#L560-L620)
 may include a thermal constraint; writing it back can retain that cap as a user
 limit after cooling. For fixed-clock tests, prefer a supported
 [userspace frequency request](https://docs.kernel.org/admin-guide/pm/cpufreq.html#userspace),
