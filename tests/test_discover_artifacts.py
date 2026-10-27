@@ -95,6 +95,19 @@ class DiscoverArtifactsTest(unittest.TestCase):
                 discover_artifacts.inspect(helper, 1024, True, "temporary")
             )
 
+    def test_zig_cache_is_not_traversed(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            tool = root / ".agents" / "tools" / "input.py"
+            tool.parent.mkdir(parents=True)
+            tool.write_text("import uinput\n", encoding="utf-8")
+            for name in (".zig-cache", "zig-cache"):
+                cached = root / ".agents" / name / "o" / "generated_input.py"
+                cached.parent.mkdir(parents=True)
+                cached.write_text("import uinput\n", encoding="utf-8")
+            candidates = {path for path, _ in discover_artifacts.iter_project_files(root)}
+            self.assertEqual({tool}, candidates)
+
     def test_project_scan_keeps_tools_but_skips_generic_source(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

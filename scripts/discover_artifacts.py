@@ -32,7 +32,7 @@ SCRIPT_SUFFIXES = {
 TEMP_SCRIPT_SUFFIXES = SCRIPT_SUFFIXES - {".java"}
 SKIP_DIRS = {
     ".cache", ".cxx", ".git", ".gradle", ".idea", ".pytest_cache", ".tools",
-    ".venv", "CMakeFiles", "__pycache__", "boost-unused-headers", "build",
+    ".venv", ".zig-cache", "CMakeFiles", "__pycache__", "boost-unused-headers", "build",
     "cache", "deps", "dist", "ipa_extracted", "node_modules", "original-jadx",
     "site-packages", "target", "third_party", "vendor", "venv", "zig-cache",
     "zig-out",
