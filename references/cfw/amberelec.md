@@ -24,13 +24,19 @@ the AmberELEC image profile, hostname, and `/storage/.config/.OS_ARCH`
 identified RG351MP. PortMaster therefore reported `DEVICE_NAME=RG351MP`.
 Record both layers. The installed PortMaster paths were
 `/storage/roms/ports/PortMaster` and its `/roms/ports/PortMaster` alias;
-`fbgrab` captured the active 640x480 framebuffer.
+`fbgrab` captured the stable 640x480 frontend. On the measured 4.4.189
+kernel, capturing during a DRM display transition caused a kernel fault in
+`rockchip_fbdev_mmap`. Avoid `fbgrab` during launch/exit; use application
+readback for game-renderer diagnostics.
 
 The measured frontend path was:
 
 ```text
 EmulationStation -> runemu.py -> /storage/roms/ports/PortMaster.sh -> pugwash
 ```
+
+New ports may need **Start -> Game Settings -> Update Gamelists** before
+appearing in the frontend.
 
 PortMaster returned to the Ports list. Its launcher logged a failed attempt to
 restart the absent `oga_events.service`, but EmulationStation remained active.
