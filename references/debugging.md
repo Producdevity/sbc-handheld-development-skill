@@ -26,6 +26,11 @@ target remote | ssh -T device gdbserver --attach stdio PID
 target extended-remote | ssh -T device gdbserver --multi stdio
 ```
 
+On older AArch64 kernels, native GDB can misread an ARMHF process even when
+it advertises ARM support. Verify PC/SP before setting breakpoints; use an
+ARMHF gdbserver over stdio if native attachment fails. This worked on the
+measured AmberELEC 4.4.189 image.
+
 Use `target remote` for a program started or attached by gdbserver. Use `target extended-remote` for multi mode. Keep the target-side process under the normal frontend when investigating frontend-dependent behavior; attaching may be safer than relaunching it outside that lifecycle.
 
 If TCP is unavoidable, restrict it outside gdbserver with a firewall or isolated network, verify the actual listener with `ss` or an equivalent tool, and close it immediately after the bounded session. Do not infer the bind address from the `HOST:PORT` argument.
