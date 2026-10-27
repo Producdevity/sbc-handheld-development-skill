@@ -29,11 +29,11 @@ kernel, capturing during a DRM display transition caused a kernel fault in
 `rockchip_fbdev_mmap`. Avoid `fbgrab` during launch/exit; use application
 readback for game-renderer diagnostics.
 
-The measured frontend path was:
-
-```text
-EmulationStation -> runemu.py -> /storage/roms/ports/PortMaster.sh -> pugwash
-```
+The normal launch path is `EmulationStation -> runemu.py -> port launcher`.
+Before navigating menus, probe `http://127.0.0.1:1234/caps` over SSH with a
+short timeout. [HTTP-enabled builds](https://github.com/AmberELEC/emulationstation/blob/e3846751ce50fdced1f2bbd7a5bb51f4da2e7007/es-app/src/services/HttpServerThread.cpp#L520)
+provide `GET /reloadgames` and `POST /launch` (absolute ROM path, `text/plain`);
+launch enters the normal frontend path. Verify the installed API first.
 
 New ports may need **Start -> Game Settings -> Update Gamelists** before
 appearing in the frontend.
