@@ -44,6 +44,10 @@ does not reset it. Use measured physical-node activity for long tests and check
 the online CPU mask. On the measured build, wake restored cores 2/3 but left
 core 1 offline.
 
+High-rate physical-node replay can dominate benchmarks: this build forks
+`date` for every event. Measure watcher CPU and actual camera motion; neither
+replay rate nor one injected axis event proves a held stick.
+
 PortMaster returned to the Ports list. Its launcher logged a failed attempt to
 restart the absent `oga_events.service`, but EmulationStation remained active.
 Treat that warning as installed PortMaster behavior, not proof of failed
