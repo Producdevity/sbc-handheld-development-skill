@@ -53,11 +53,9 @@ restart the absent `oga_events.service`, but EmulationStation remained active.
 Treat that warning as installed PortMaster behavior, not proof of failed
 restoration.
 
-If audio fails, inspect `volume.service`'s journal and the input path it opens.
-A legacy R36S DTB can expose `odroidgo3-keys` where the image expects
-`rg351-keys`, and its model string can skip audio initialization. Verify
-physical buttons and audible output again after reboot; an active service
-or successful mixer command is insufficient.
+Legacy R36S DTBs can expose `odroidgo3-keys` where `volume_sense.sh` expects
+`rg351-keys`. Their model name can also skip the image's RG351MP boot audio
+initialization.
 
 ## RK3326 input profile
 
