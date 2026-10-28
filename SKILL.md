@@ -89,6 +89,11 @@ build deployment, launch, input injection, debugging and rollback. Preserve
 excluded devices and user data; ask when a material or destructive action
 falls outside that scope. Read-only access alone does not authorize mutations.
 
+Silence tests with the normal firmware volume control at 0%; keep the app's
+audio engine enabled. Record and restore the original volume before handing
+the device back for playtesting. Do not directly disable output routing or
+speaker switches: ordinary volume buttons must still unmute it.
+
 Prefer installed tools. If a missing program is required, identify the smallest
 package or transient helper, explain its changes and CFW persistence, and ask
 before installing or copying it. Avoid general upgrades or cleanup to install

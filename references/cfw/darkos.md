@@ -62,8 +62,9 @@ do not establish a continuously held stick.
 
 Inspect ALSA controls before muting. Some RK817 codecs expose a volume-only
 `Playback` control and a separate `Playback Path` enum with `OFF`, `SPK`, `HP`
-and `SPK_HP`. Do not assume the H700 `SPK` switch or PulseAudio exists. Record
-original controls and honor any request to keep output disabled.
+and `SPK_HP`. Do not assume the H700 `SPK` switch or PulseAudio exists.
+`OFF` disables system-wide routing; volume buttons may leave it off. Route
+changes can reset volume, so reapply the saved level when undoing a routing mute.
 
 Use `findmnt` or `lsblk` when calculating setup space. `/opt/system/Tools` may
 be a bind mount from the same partition as `/roms`, not extra storage.
