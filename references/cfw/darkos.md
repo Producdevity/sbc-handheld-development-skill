@@ -38,6 +38,11 @@ An evdev injector that works in a game does not prove frontend compatibility.
 If navigation is ignored, check the frontend's loaded SDL, input backend,
 configuration and observed values before retrying the same route.
 
+Check the active theme's system-carousel orientation. Vertical carousels use
+Up/Down; horizontal carousels use Left/Right. The measured R36S Epic Noir theme
+used a vertical carousel; ignored horizontal navigation alone did not establish
+an input failure.
+
 For repeated application tests without a verified frontend launch interface,
 use an authorized isolated service stop/restore diagnostic. Preserve the
 normal account and required environment, and inspect the complete configured
