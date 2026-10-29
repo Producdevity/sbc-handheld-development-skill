@@ -86,9 +86,17 @@ This launches an item through the firmware loop; it does not prove physical
 menu navigation. It needs no persistent frontend modification. If the installed
 scripts lack this contract, do not improvise a process kill or a direct launch.
 
-Create any needed virtual keyboard before launching PortMaster. On the measured
-SDL PortMaster GUI, a keyboard added after startup was not opened; its TERM
-handler and any exit controls must be checked independently of PyUI's.
+Create any needed virtual input device before launching PortMaster: the
+measured SDL GUI did not open a keyboard added after startup. Check its TERM
+handler and exit controls independently of PyUI's. PortMaster 2026.10.01-0433
+(2026-10-29) ignored a uinput keyboard but opened a hot-plugged `xbox360`
+semantic gamepad. Spruce enables PortMaster's Xbox A/B swap: A is `face.east`,
+B is `face.south`. Probe a harmless button first; the autoinstall dialog logs
+`PRESSED <name>` at DEBUG in `PortMaster/pugwash.txt` (the main GUI logs INFO
+only). If a port's `arch` is missing from the device capabilities, autoinstall
+stops at an "incompatible with your device" prompt with inverted buttons: A
+cancels (result 255, zip stays queued), B resumes. The main GUI then shows a
+Spruce warning with a countdown; B quits, A confirms.
 
 ### Capture
 
@@ -98,7 +106,9 @@ generic `fbgrab` may see a stale or unused framebuffer.
 Flip helper, then a BGRA KMS download when its pixel format is incompatible.
 PortMaster can own DRM directly; on the measured build both KMS capture and
 `fbgrab` returned black while the process and initialization log were healthy.
-That is runtime evidence, not rendering proof.
+That is runtime evidence, not rendering proof. With PortMaster 2026.10.01-0433,
+KMS capture showed its dialogs and the LÖVE patcher; the helper needs a host
+Python with Pillow on `PATH`.
 
 ## PyUI input recovery
 
