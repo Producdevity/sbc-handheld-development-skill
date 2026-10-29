@@ -73,6 +73,14 @@ if [ -d /mnt/SDCARD/spruce ]; then
   fi
 fi
 
+section memory
+if [ -r /proc/meminfo ]; then
+  sed -n 's/^\(MemTotal\|MemAvailable\|SwapTotal\|SwapFree\):[[:space:]]*/\1=/p' /proc/meminfo
+fi
+if [ -r /proc/swaps ]; then
+  awk 'NR > 1 {print "swap=" $1 " type=" $2 " size_kib=" $3 " used_kib=" $4}' /proc/swaps
+fi
+
 section storage
 if [ -r /proc/mounts ]; then
   awk '$2 ~ /^\/(roms|roms2|storage|userdata|mnt|media)(\/|$)/ {print "mount=" $2 " type=" $3 " options=" $4}' /proc/mounts

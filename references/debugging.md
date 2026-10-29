@@ -29,7 +29,9 @@ target extended-remote | ssh -T device gdbserver --multi stdio
 On older AArch64 kernels, native GDB can misread an ARMHF process even when
 it advertises ARM support. Verify PC/SP before setting breakpoints; use an
 ARMHF gdbserver over stdio if native attachment fails. This worked on the
-measured AmberELEC 4.4.189 image.
+measured AmberELEC 4.4.189 image. Its gdb 11.1 aborts (`linux-nat.c:1720`
+internal error) when repeatedly continuing `catch signal SIGSEGV` stops in a
+process that pages through SIGSEGV; log such faults in-process instead.
 
 Use `target remote` for a program started or attached by gdbserver. Use `target extended-remote` for multi mode. Keep the target-side process under the normal frontend when investigating frontend-dependent behavior; attaching may be safer than relaunching it outside that lifecycle.
 

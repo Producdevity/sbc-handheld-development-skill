@@ -26,8 +26,12 @@ Record both layers. The installed PortMaster paths were
 `/storage/roms/ports/PortMaster` and its `/roms/ports/PortMaster` alias;
 `fbgrab` captured the stable 640x480 frontend. On the measured 4.4.189
 kernel, capturing during a DRM display transition caused a kernel fault in
-`rockchip_fbdev_mmap`. Avoid `fbgrab` during launch/exit; use application
-readback for game-renderer diagnostics.
+`rockchip_fbdev_mmap`. Avoid `fbgrab` during launch/exit. It also misses SDL
+KMSDRM ports such as Unity (`/dev/fb0` keeps the console): use
+`/sys/kernel/debug/dri/0/clients` (DRM master) and repeated `summary` reads
+(cycling scanout address) as presentation evidence, and application readback
+for content. The measured R36S prerelease-20250515 image enables a 384 MiB
+swapfile; record `/proc/swaps`.
 
 The normal launch path is `EmulationStation -> runemu.py -> port launcher`.
 Before navigating menus, probe `http://127.0.0.1:1234/caps` over SSH with a
