@@ -61,6 +61,14 @@ physical control
 
 muOS can select different controller databases for modern and retro layouts. The selection setting and runtime selection file are version-specific. `dpad_swap` is a separate hardware/firmware D-pad-versus-stick behavior and must not be interpreted as the face-button layout.
 
+Before injecting frontend input, read the device's codes under
+`/opt/muos/device/config/input/code/{button,dpad}/` and the layout setting. On
+2601.0 Jacaranda (RG35XX-SP), the codes were `a=304 b=305 x=307 y=306`, with the D-pad
+on ABS 16/17. `settings/advanced/swap=1` swapped the frontend actions relative
+to those names: 305 confirmed, 304 went back, and 307 ran the footer's Y action.
+The footer labels name actions, not codes. PortMaster's patcher on the same
+device also took 305 as A.
+
 The frontend and a PortMaster application may not use the same final mapping. The external launcher can export an SDL mapping, then PortMaster's `control.txt` can select or overwrite it before starting the game. Capture the final application environment or run the SDL probe through the same launch chain. An SSH shell's environment and the database symlink observed before launch are not sufficient.
 
 The pinned muOS frontend source supports mapped SDL GameController devices and a raw-joystick fallback. A virtual controller may therefore be classified differently from the physical controller or become an extra rather than the primary device. Confirm the active mapping and the visible result after each injected action.
