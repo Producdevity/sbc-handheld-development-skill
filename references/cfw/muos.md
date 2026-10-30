@@ -104,6 +104,8 @@ Never translate `JSIOCGBTNMAP` indexes into SDL indexes. The legacy joystick API
 
 For behavioral proof, navigate the visible frontend and let its normal content loader create the request. Do not write launch-state files directly. If reliable frontend automation is unavailable, ask the user to launch the port rather than inventing a handoff format.
 
+On an RG35XX-SP muOS build, `fbgrab` of an idle frontend can return a uniform white image. `/opt/muos/config/boot/last_play` then still names the last launched content, which the frontend highlights after that content exits; confirm the launched process hash after pressing confirm instead of trusting the highlight.
+
 After selection:
 
 1. verify the frontend-to-launcher-to-application process chain;
