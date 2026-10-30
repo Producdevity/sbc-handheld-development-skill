@@ -76,7 +76,10 @@ Startup and return to PyUI were verified on SpruceOS 4.3.3 on 2026-09-07:
    `/tmp/cmd_to_run.sh`; never overwrite another queued command.
 4. Recheck the PyUI PID's command line. Only when its installed `mainui.py`
    handles SIGTERM by exiting, send TERM to that PID. Leave `principal.sh`
-   running so it performs the normal setup and owns the child process.
+   running so it performs the normal setup and owns the child process. First
+   wait until `/tmp/setting_cpu.lock` is absent: on 4.3.4, a TERM during PyUI's
+   screensaver `set_powersave` left that lock behind, and every later
+   `set_performance` returned early, so games ran with one core until reboot.
 5. Verify the principal -> firmware wrapper -> port process chain and a current
    capture. After normal application exit, verify command-file removal and
    visible PyUI restoration. If handoff fails, remove only this test's queued
@@ -109,6 +112,19 @@ PortMaster can own DRM directly; on the measured build both KMS capture and
 That is runtime evidence, not rendering proof. With PortMaster 2026.10.01-0433,
 KMS capture showed its dialogs and the LÖVE patcher; the helper needs a host
 Python with Pillow on `PATH`.
+
+## Performance measurements
+
+On 4.3.4, the Ports `Performance` mode put cores 0-3 online at 1.8 GHz and set
+the DMC to `dmc_ondemand`; the GPU stayed on `simple_ondemand`. Check
+`/sys/devices/system/cpu/online` while the game runs, not in the menu.
+
+Check other processes' CPU before attributing frame time. After `miyoo_inputd`
+restarted (PyUI's stick calibration does this), the `getevent` processes of
+`homebutton_watchdog.sh` and `buttons_watchdog.sh` had lost
+`/dev/input/event5`, stayed runnable, and used about 93% of a core each until
+reboot. The game's threads then waited 20-40% of the time for a CPU. Per-thread
+`/proc/PID/task/TID/schedstat` shows run and runqueue-wait time.
 
 ## PyUI input recovery
 
