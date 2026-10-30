@@ -26,7 +26,9 @@ but Security settings expose the effective password and security enforcement
 can change it.
 
 KNULLI keeps user data under `/userdata`; system changes outside it are not
-persistent unless deliberately preserved. Before installing an authorized key,
+persistent unless deliberately preserved. On the measured RG40XX-H build
+`/userdata` is exFAT through FUSE: run `sync` after restoring launchers or
+deleting staged files, or a hang can revert them. Before installing an authorized key,
 inspect both `/root/.ssh` and `/userdata/system/.ssh`. Do not assume one resolves
 to the other.
 
