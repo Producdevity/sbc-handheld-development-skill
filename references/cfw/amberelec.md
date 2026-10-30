@@ -40,7 +40,9 @@ provide `GET /reloadgames` and `POST /launch` (absolute ROM path, `text/plain`);
 launch enters the normal frontend path. Verify the installed API first. On
 R36S prerelease-20250515, `GET /reloadgames` then `POST /launch` with
 `/storage/roms/ports/NAME.sh` started a PortMaster port through `runemu.py`;
-after SIGTERM to the port, EmulationStation was DRM master again.
+after SIGTERM to the port, EmulationStation was DRM master again. Find the port
+binary by `comm` (`ps -eo pid,comm`): `pgrep -f NAME` also matches short-lived
+launcher helpers, and its BusyBox `pgrep -x` missed a 14-character name.
 
 `/storage/roms` is exFAT on that image, so `rsync -a` fails every `chown`
 (exit 23) while still copying the data. Use `rsync -rlt`.
