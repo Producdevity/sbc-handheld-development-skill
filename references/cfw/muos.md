@@ -118,6 +118,21 @@ After selection:
 
 The mux launch script normally restores runtime state such as the governor, framebuffer mode, rumble, and owned gptokeyb processes. Verify the installed cleanup code and final state instead of assuming that a returned launcher process proves restoration.
 
+## Silence audio
+
+The volume buttons run `/opt/muos/script/device/audio.sh U` and `D`. The script
+sets the PipeWire default sink with `wpctl` in `settings/advanced/incvolume`
+steps and saves the level as `settings/general/volume`; use that path. On a
+measured RG35XX-H build the codec also exposes an `SPK` switch (the speaker
+amplifier). The buttons never touch it, so switching it off leaves the speaker
+silent at every volume. Do not change it.
+
+1. Source `/opt/muos/script/var/func.sh` (it also sets `XDG_RUNTIME_DIR` for
+   `wpctl`) and record `GET_VAR config settings/general/volume`.
+2. Silence with `/opt/muos/script/device/audio.sh 0`.
+3. Before handing the device back, run `audio.sh <recorded level>` and check
+   `wpctl get-volume @DEFAULT_AUDIO_SINK@`.
+
 ## Record reusable evidence
 
 Store a sanitized, versioned target record with:

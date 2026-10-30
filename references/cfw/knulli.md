@@ -54,6 +54,17 @@ value through PortMaster and inspect the application's process environment when
 controller semantics matter. A mapping observed in an SSH shell is not proof
 of what the application inherited.
 
+## Silence audio
+
+The volume path is `knulli-audio setSystemVolume`, which sets the PulseAudio
+default sink. Record `knulli-audio getSystemVolume`, silence with
+`knulli-audio setSystemVolume 0`, and restore the recorded level before handing
+the device back. Its `mute` action sets a separate sink mute flag; do not use
+it, and do not toggle codec switches. On a measured RG40XX-H build the speaker
+played while the codec's `SPK` switch read off: the `h700` startup branch of
+`/usr/bin/knulli-audio` configures the DAC output mixers and `LINEOUT` and never
+sets `SPK`. Read the installed script before interpreting switch states.
+
 Official references:
 
 - [KNULLI SSH](https://knulli.org/configure/ssh/)
