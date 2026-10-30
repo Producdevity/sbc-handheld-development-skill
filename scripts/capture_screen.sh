@@ -15,11 +15,6 @@ host=$1
 output=$2
 method=${3:-auto}
 
-python3 -c 'from PIL import Image' >/dev/null 2>&1 || {
-  echo "capture normalization requires python3 with Pillow on the host" >&2
-  exit 1
-}
-
 case "$host" in
   -*)
     echo "HOST must not begin with '-'" >&2

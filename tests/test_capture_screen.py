@@ -1,14 +1,39 @@
 import os
 from pathlib import Path
+import struct
 import subprocess
+import sys
 import tempfile
 import unittest
-
-from PIL import Image
+import zlib
 
 
 SKILL_ROOT = Path(__file__).resolve().parents[1]
 CAPTURE_SCREEN = SKILL_ROOT / "scripts" / "capture_screen.sh"
+sys.path.insert(0, str(SKILL_ROOT / "scripts"))
+import normalize_png  # noqa: E402
+
+
+def write_rgba(path, width, height, pixel):
+    """Writes a uniform RGBA PNG whose rows use the Sub filter, as fbgrab output can."""
+    rows = b""
+    for _ in range(height):
+        raw = bytes(pixel) * width
+        rows += b"\1" + bytes((raw[i] - (raw[i - 4] if i >= 4 else 0)) & 255 for i in range(len(raw)))
+    path.write_bytes(normalize_png.SIGNATURE
+                     + normalize_png.chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, 6, 0, 0, 0))
+                     + normalize_png.chunk(b"IDAT", zlib.compress(rows))
+                     + normalize_png.chunk(b"IEND", b""))
+
+
+def read_rgb(path):
+    """Returns (color type, first pixel) of a written capture."""
+    parts = list(normalize_png.chunks(path.read_bytes()))
+    width, height, _, color = struct.unpack(">IIBB", parts[0][1][:10])
+    channels = 4 if color == 6 else 3
+    rows = normalize_png.unfilter(zlib.decompress(b"".join(body for kind, body in parts if kind == b"IDAT")),
+                                  width, height, channels)
+    return color, tuple(rows[0][:3])
 
 
 class CaptureScreenTest(unittest.TestCase):
@@ -55,7 +80,7 @@ cp "$CAPTURE_FIXTURE" "$destination"
             env["PATH"] = f"{bin_dir}:{env['PATH']}"
             env["SSH_LOG"] = str(temp / "ssh.log")
             env["CAPTURE_FIXTURE"] = str(temp / "source.png")
-            Image.new("RGBA", (2, 2), (24, 96, 144, 0)).save(env["CAPTURE_FIXTURE"])
+            write_rgba(Path(env["CAPTURE_FIXTURE"]), 2, 2, (24, 96, 144, 0))
             result = subprocess.run(
                 [str(CAPTURE_SCREEN), "spruce-test", str(output)],
                 check=True,
@@ -64,9 +89,7 @@ cp "$CAPTURE_FIXTURE" "$destination"
                 env=env,
             )
 
-            with Image.open(output) as image:
-                self.assertEqual(image.mode, "RGB")
-                self.assertEqual(image.getpixel((0, 0)), (24, 96, 144))
+            self.assertEqual(read_rgb(output), (2, (24, 96, 144)))
             self.assertIn("captured method=spruce-kms", result.stdout)
             self.assertIn("hwdownload,format=bgra", Path(env["SSH_LOG"]).read_text())
 
@@ -109,7 +132,7 @@ cp "$CAPTURE_FIXTURE" "$destination"
             env["PATH"] = f"{bin_dir}:{env['PATH']}"
             env["SSH_LOG"] = str(temp / "ssh.log")
             env["CAPTURE_FIXTURE"] = str(temp / "source.png")
-            Image.new("RGBA", (2, 2), (24, 96, 144, 64)).save(env["CAPTURE_FIXTURE"])
+            write_rgba(Path(env["CAPTURE_FIXTURE"]), 2, 2, (24, 96, 144, 64))
             result = subprocess.run(
                 [str(CAPTURE_SCREEN), "spruce-test", str(output), "fbgrab"],
                 check=True,
@@ -118,9 +141,7 @@ cp "$CAPTURE_FIXTURE" "$destination"
                 env=env,
             )
 
-            with Image.open(output) as image:
-                self.assertEqual(image.mode, "RGB")
-                self.assertEqual(image.getpixel((0, 0)), (24, 96, 144))
+            self.assertEqual(read_rgb(output), (2, (24, 96, 144)))
             self.assertIn("captured method=fbgrab", result.stdout)
             self.assertIn("capture=/mnt/SDCARD/spruce/bin64/fbgrab", Path(env["SSH_LOG"]).read_text())
 

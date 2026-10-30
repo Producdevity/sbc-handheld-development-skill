@@ -88,7 +88,7 @@ Verify that the output exists, is non-empty, has current timestamps, and depicts
 Framebuffer alpha bytes are not necessarily meaningful transparency. Some
 `fbgrab` builds write them into the PNG alpha channel as zero or low values,
 making a valid capture appear transparent. The shared capture helper converts
-every PNG to opaque RGB using host-side Python and Pillow before returning it.
+every 8-bit RGB/RGBA PNG to opaque RGB with host-side Python before returning it.
 For captures acquired through another path, run `scripts/normalize_png.py`
 before showing or publishing them. Discard the unused alpha; compositing onto
 a background would darken the original pixels. Inspect the normalized image

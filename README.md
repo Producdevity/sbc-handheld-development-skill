@@ -43,8 +43,8 @@ when required by the agent's sandbox.
 
 ## Requirements
 
-Host helpers use Python 3.10+, POSIX shell and OpenSSH. PNG normalization needs
-Pillow. Native controller helpers need matching Linux/SDL2 development headers
+Host helpers use Python 3.10+ (standard library only), POSIX shell and OpenSSH.
+Native controller helpers need matching Linux/SDL2 development headers
 and a suitable cross compiler. Handheld tools are discovered on the installed
 firmware; this repository does not bundle binaries, drivers or game assets.
 

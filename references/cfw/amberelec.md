@@ -37,7 +37,13 @@ The normal launch path is `EmulationStation -> runemu.py -> port launcher`.
 Before navigating menus, probe `http://127.0.0.1:1234/caps` over SSH with a
 short timeout. [HTTP-enabled builds](https://github.com/AmberELEC/emulationstation/blob/e3846751ce50fdced1f2bbd7a5bb51f4da2e7007/es-app/src/services/HttpServerThread.cpp#L520)
 provide `GET /reloadgames` and `POST /launch` (absolute ROM path, `text/plain`);
-launch enters the normal frontend path. Verify the installed API first.
+launch enters the normal frontend path. Verify the installed API first. On
+R36S prerelease-20250515, `GET /reloadgames` then `POST /launch` with
+`/storage/roms/ports/NAME.sh` started a PortMaster port through `runemu.py`;
+after SIGTERM to the port, EmulationStation was DRM master again.
+
+`/storage/roms` is exFAT on that image, so `rsync -a` fails every `chown`
+(exit 23) while still copying the data. Use `rsync -rlt`.
 
 New ports may need **Start -> Game Settings -> Update Gamelists** before
 appearing in the frontend.

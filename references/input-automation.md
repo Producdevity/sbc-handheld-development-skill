@@ -91,7 +91,10 @@ Capture the first unfamiliar screen, visual defects, changed layouts and
 unexpected states. Routine traversal of an established route does not need a
 capture after every press. Use a bounded readiness check, such as the expected
 menu or loaded level, rather than assuming a live process or a fixed delay
-means the destination is ready.
+means the destination is ready. A readiness marker read from a log must come
+from the current run: check something only it can contain, such as the
+deployed binary's hash. A marker left by the previous run once sent in-game
+presses to the frontend, opening its search screen.
 
 A direct level/load command can set up a renderer test where the application
 supports it. It does not verify controller navigation or menu behavior; retain

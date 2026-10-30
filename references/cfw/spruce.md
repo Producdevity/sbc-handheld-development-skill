@@ -110,8 +110,7 @@ Flip helper, then a BGRA KMS download when its pixel format is incompatible.
 PortMaster can own DRM directly; on the measured build both KMS capture and
 `fbgrab` returned black while the process and initialization log were healthy.
 That is runtime evidence, not rendering proof. With PortMaster 2026.10.01-0433,
-KMS capture showed its dialogs and the LÖVE patcher; the helper needs a host
-Python with Pillow on `PATH`.
+KMS capture showed its dialogs and the LÖVE patcher.
 
 ## Performance measurements
 
