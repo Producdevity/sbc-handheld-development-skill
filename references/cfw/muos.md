@@ -108,25 +108,32 @@ selection and boot-to-last use. On the traced 2508.4 build, `frontend.sh` runs
 `cat <content>.cfg`, plus `<content>.gov`/`.con` (or `core.gov`/`core.con`)
 into `/tmp/gov_go` and `/tmp/con_go`. The frontend writes
 `/opt/muos/share/info/core/<System>/<Name>.cfg` on the item's first menu launch.
-Reproduce only that installed sequence:
+`muxfrontend` exits when `/tmp/safe_quit` exists or on USR1/TERM. The loop then
+runs the loader in the original `frontend.sh` and its environment, and returns
+to the launcher afterwards:
 
 ```sh
-. /opt/muos/script/var/func.sh   # exports the frontend's LD_LIBRARY_PATH, runtime dirs, D-Bus, PipeWire, ALSA
 CFG=/opt/muos/share/info/core/Ports/<Name>.cfg
-[ -s "$CFG" ] && [ ! -e /tmp/rom_go ] && pgrep -x muxfrontend >/dev/null || exit 1
-FRONTEND stop                    # safe_quit + USR1, as muOS's backup/theme scripts do
+MUX=$(pidof muxfrontend)
+[ -s "$CFG" ] && [ -n "$MUX" ] && [ ! -e /tmp/rom_go ] && ! pgrep -f "mux/launch.s[h]" >/dev/null || exit 1
 cat "$CFG" >/tmp/rom_go
 for T in gov con; do
 	F="${CFG%.cfg}.$T"; [ -e "$F" ] || F="$(dirname "$CFG")/core.$T"
 	[ -e "$F" ] && cat "$F" >"/tmp/${T}_go"
 done
-TERM=linux FRONTEND start explore  # loader runs launch.sh, then returns to explore
+: >/tmp/safe_quit
+kill -USR1 "$MUX"
 ```
 
+Verified on 2508.4 (RG35XX-H, 2026-10-30): `frontend.sh` -> `launch.sh` ->
+port, correct rendering and controller, normal exit back to the launcher.
 `launch.sh` clears the framebuffer, applies the governor and control scheme,
 and restores fb mode, gptokeyb and rumble afterwards. Running a port's `.sh`
 directly from SSH skips all of that while `muxfrontend` keeps the display and
-input. Use menu navigation only for end-to-end checks of the menu itself.
+input. Do not restart the loop with `FRONTEND stop`/`start` from SSH: the new
+`frontend.sh` inherits the SSH environment. Use `pidof muxfrontend`, not
+`pgrep -x`: BusyBox matches `-x` against argv0, which is the full path, so
+`pgrep -x muxfrontend` (also used by `GET_FRONTEND_PIDS`) finds nothing.
 
 On an RG35XX-SP muOS build, `fbgrab` of an idle frontend can return a uniform white image. `/opt/muos/config/boot/last_play` then still names the last launched content, which the frontend highlights after that content exits; confirm the launched process hash after pressing confirm instead of trusting the highlight.
 
