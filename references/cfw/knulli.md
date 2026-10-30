@@ -6,11 +6,23 @@ between releases.
 
 ## Frontend-owned launch
 
-The EmulationStation loopback web service can expose state such as `/isIdle`
-and `/runningGame` when enabled. Probe the installed service before using it.
-On one measured build, `POST /launch` launched the entry already selected in
-the UI rather than the path supplied in the request body. Navigate the visible
-frontend, then verify the reported game and process tree.
+KNULLI's EmulationStation fork serves a loopback API on port 1234
+([source](https://github.com/knulli-cfw/batocera-emulationstation/blob/f7c5ae103815761ccd34bc55b021c6e150442c96/es-app/src/services/HttpServerThread.cpp#L564);
+Batocera and ROCKNIX's `emulationstation-next` carry the same handlers). Over
+SSH:
+
+1. `curl -s -m 3 http://127.0.0.1:1234/isIdle` must return `[ true ]`.
+2. After installing or renaming an item, `GET /reloadgames`; it runs
+   asynchronously on the UI thread.
+3. `curl -s -m 5 -d '/userdata/roms/ports/<Name>.sh' http://127.0.0.1:1234/launch`.
+   The body must equal a loaded gamelist entry's full or relative path. A match
+   is launched on the UI thread through the normal launcher. An unknown path
+   gets an empty reply and launches nothing.
+4. Confirm with `GET /runningGame` and the process tree. Exit through the
+   application; `GET /emukill` is the fallback.
+
+Probe the installed build first: the API is compiled in, but endpoints can
+differ between releases.
 
 Some builds provide `/etc/init.d/S31emulationstation` with `stop`, `start`,
 `suspend`, and `resume` actions. Inspect that script before an explicitly

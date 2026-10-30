@@ -63,6 +63,9 @@ Validate behavior through the firmware frontend. Directly executing a port's
 `.sh` while the frontend owns display/input can invalidate rendering, mappings,
 audio and cleanup. Use direct launches only for isolated diagnostics with a
 known frontend suspend/restore path, and label that evidence accordingly.
+Launch through the frontend's own entry point when the CFW has one (see
+[programmatic launch](references/device-operations.md#frontend-owned-launch));
+it keeps the normal launcher path without screen capture or key injection.
 
 ## Input and automation
 

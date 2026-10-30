@@ -102,7 +102,31 @@ Never translate `JSIOCGBTNMAP` indexes into SDL indexes. The legacy joystick API
 
 ## Launch and capture
 
-For behavioral proof, navigate the visible frontend and let its normal content loader create the request. Do not write launch-state files directly. If reliable frontend automation is unavailable, ask the user to launch the port rather than inventing a handoff format.
+Launch through the frontend loop's content loader, which is what menu
+selection and boot-to-last use. On the traced 2508.4 build, `frontend.sh` runs
+`launch.sh` whenever `/tmp/rom_go` is non-empty. Boot-to-last fills it with
+`cat <content>.cfg`, plus `<content>.gov`/`.con` (or `core.gov`/`core.con`)
+into `/tmp/gov_go` and `/tmp/con_go`. The frontend writes
+`/opt/muos/share/info/core/<System>/<Name>.cfg` on the item's first menu launch.
+Reproduce only that installed sequence:
+
+```sh
+. /opt/muos/script/var/func.sh   # exports the frontend's LD_LIBRARY_PATH, runtime dirs, D-Bus, PipeWire, ALSA
+CFG=/opt/muos/share/info/core/Ports/<Name>.cfg
+[ -s "$CFG" ] && [ ! -e /tmp/rom_go ] && pgrep -x muxfrontend >/dev/null || exit 1
+FRONTEND stop                    # safe_quit + USR1, as muOS's backup/theme scripts do
+cat "$CFG" >/tmp/rom_go
+for T in gov con; do
+	F="${CFG%.cfg}.$T"; [ -e "$F" ] || F="$(dirname "$CFG")/core.$T"
+	[ -e "$F" ] && cat "$F" >"/tmp/${T}_go"
+done
+TERM=linux FRONTEND start explore  # loader runs launch.sh, then returns to explore
+```
+
+`launch.sh` clears the framebuffer, applies the governor and control scheme,
+and restores fb mode, gptokeyb and rumble afterwards. Running a port's `.sh`
+directly from SSH skips all of that while `muxfrontend` keeps the display and
+input. Use menu navigation only for end-to-end checks of the menu itself.
 
 On an RG35XX-SP muOS build, `fbgrab` of an idle frontend can return a uniform white image. `/opt/muos/config/boot/last_play` then still names the last launched content, which the frontend highlights after that content exits; confirm the launched process hash after pressing confirm instead of trusting the highlight.
 

@@ -32,6 +32,12 @@ frontend selection -> firmware launcher -> PortMaster launcher -> application ->
 
 Verify the process chain and the selected executable. Never infer success from the launcher process alone.
 
+Prefer the frontend's own launch entry point over menu navigation: the
+EmulationStation API on KNULLI, Batocera, ROCKNIX and AmberELEC; the content
+loader on muOS; the PyUI command handoff on SpruceOS. Each CFW profile below
+covers its entry point. Screen capture and injected keys are for end-to-end
+menu checks, or for firmware without an entry point such as dArkOS FCAMOD.
+
 ### muOS
 
 muOS launch and controller internals change between releases. Before launching,
@@ -50,7 +56,10 @@ the installed system rather than applying the KNULLI profile wholesale.
 
 ### ROCKNIX
 
-ROCKNIX commonly runs EmulationStation under Sway. Use the frontend lifecycle for a real launch. PortMaster's `mod_ROCKNIX.txt` calls `portmaster_sway_fullscreen.sh` when present; keep `pm_platform_helper` in the launcher rather than reproducing Sway rules.
+ROCKNIX commonly runs EmulationStation under Sway. Its
+[`emulationstation-next`](https://github.com/ROCKNIX/emulationstation-next/blob/f6c542872e3850c5f432929ead219547a897cd4a/es-app/src/services/HttpServerThread.cpp)
+serves the same loopback `/launch` API as KNULLI; follow the KNULLI steps with
+the installed ROM path (commonly `/storage/roms`). PortMaster's `mod_ROCKNIX.txt` calls `portmaster_sway_fullscreen.sh` when present; keep `pm_platform_helper` in the launcher rather than reproducing Sway rules.
 
 Probe for the active screenshot helper and compositor socket. A framebuffer tool is not automatically valid for a Sway-composited application.
 
