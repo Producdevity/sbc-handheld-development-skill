@@ -68,7 +68,7 @@ Use native SDL game-controller input when the application supports it. Use gptok
 
 Prefer two explicit paths:
 
-- **Release-install test:** build the real PortMaster archive and queue it in the CFW's discovered autoinstall directory. Open PortMaster from the frontend to process it.
+- **Release-install test:** build the real PortMaster archive and queue it in the CFW's discovered autoinstall directory. Open PortMaster from the frontend to process it. Calling `harbourmaster install` over SSH skips the launcher's post-install hooks. On muOS, `PortMaster.sh` then runs `muos/image_smash.txt`, which converts harbourmaster's `<Name>-pre.*` catalogue copies into the `<Name>.png` box art and previews that muOS shows. After an SSH install, run that hook, or the same conversion for the installed port only.
 - **Fast development sync:** stage files with temporary names, validate destination roots, preserve user game data/config/saves/logs, then rename atomically where the filesystem supports it.
 
 Do not use `rsync --delete` without narrow excludes for user-owned data. Do not treat a direct file sync as proof that a fresh PortMaster installation works.
