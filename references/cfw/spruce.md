@@ -94,7 +94,10 @@ measured SDL GUI did not open a keyboard added after startup. Check its TERM
 handler and exit controls independently of PyUI's. PortMaster 2026.10.01-0433
 (2026-10-29) ignored a uinput keyboard but opened a hot-plugged `xbox360`
 semantic gamepad. Spruce enables PortMaster's Xbox A/B swap: A is `face.east`,
-B is `face.south`. Probe a harmless button first; the autoinstall dialog logs
+B is `face.south`. On SpruceOS 4.3.4 the LÖVE patcher (`utils/patcher`) also
+accepted `input_event` writes to the physical `MIYOO Player1` device (BTN_EAST
+305 for A); its welcome dialog needs two A presses before the patch script
+starts. Probe a harmless button first; the autoinstall dialog logs
 `PRESSED <name>` at DEBUG in `PortMaster/pugwash.txt` (the main GUI logs INFO
 only). If a port's `arch` is missing from the device capabilities, autoinstall
 stops at an "incompatible with your device" prompt with inverted buttons: A
