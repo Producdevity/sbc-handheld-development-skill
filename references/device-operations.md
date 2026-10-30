@@ -107,7 +107,7 @@ This is not a substitute for identifying the active compositor or DRM plane.
 
 An immediate black capture can also be a normal startup frame. If the process chain is healthy, take a short bounded series of delayed captures before changing launch or capture methods. Record each timestamp; do not silently discard the early frame.
 
-The available method changes by firmware version. `fbgrab` worked on specific muOS and KNULLI H700 builds. Older muOS builds exposed PNG capture as `mufbset -g`, while current builds may use the same name only for display-mode configuration. Check the installed command's help before using `-g`. ROCKNIX uses Sway-aware handling. SpruceOS on Miyoo Flip provides a KMS/FFmpeg screenshot helper.
+The available method changes by firmware version. `fbgrab` worked on specific muOS and KNULLI H700 builds; on an RG35XX-SP muOS build it captured the frontend but only black for a fullscreen GLES game, so use an in-app capture there. Older muOS builds exposed PNG capture as `mufbset -g`, while current builds may use the same name only for display-mode configuration. Check the installed command's help before using `-g`. ROCKNIX uses Sway-aware handling. SpruceOS on Miyoo Flip provides a KMS/FFmpeg screenshot helper.
 
 [`capture_screen.sh`](../scripts/capture_screen.sh) wraps the measured fbdev methods and Sway/`grim` for host-side use:
 

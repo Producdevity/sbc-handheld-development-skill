@@ -28,7 +28,8 @@ can change it.
 KNULLI keeps user data under `/userdata`; system changes outside it are not
 persistent unless deliberately preserved. On the measured RG40XX-H build
 `/userdata` is exFAT through FUSE: run `sync` after restoring launchers or
-deleting staged files, or a hang can revert them. Before installing an authorized key,
+deleting staged files, or a hang can revert them. A large delete there failed once
+with an I/O error on one file and succeeded on retry; check what remains. Before installing an authorized key,
 inspect both `/root/.ssh` and `/userdata/system/.ssh`. Do not assume one resolves
 to the other.
 
