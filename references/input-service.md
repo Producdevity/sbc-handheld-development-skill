@@ -70,6 +70,10 @@ Gamepad controls use these positional names:
 - `stick.left.press`, `stick.right.press`
 - `stick.left.x`, `stick.left.y`, `stick.right.x`, `stick.right.y`
 
+Axis values follow evdev and SDL: positive X is right, positive Y is down. Confirm
+in-game polarity with one isolated move and an observed result; a modal opened by
+an earlier step can make later moves look inverted.
+
  Keyboard controls include `key.a` through `key.z`, `key.0` through `key.9`, navigation keys, Enter, Escape, Space, Tab, Backspace, and left Ctrl/Alt/Shift. Pointer controls include three buttons and relative X, Y, vertical wheel, and horizontal wheel movement.
 
 `release-all` returns every declared control to neutral. `quit` releases controls and removes the device. `destroy` skips the helper's release step and unregisters the device while it may still be held; use it only for an explicit held-state hot-unplug test. The kernel may emit synthetic release events while unregistering the device, so record the evdev sequence rather than assuming observers receive no release.
