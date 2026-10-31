@@ -44,6 +44,8 @@ Before acting, write:
 
 Afterward record deviations and uncertainty. Do not silently rerun until one attempt appears successful.
 
+When levels, spawns or routes vary between runs, steer scripted play by in-game feedback (for example depth or region) and compare normalized measures, such as cost per unit of work, alongside whole-run totals. Run memory-heavy device tests only while no trial owns the device; concurrent runs fail with misleading allocation errors.
+
 ## Input gates
 
 Test separately:

@@ -104,6 +104,7 @@ For PIE/shared-library addresses, obtain the live mappings and calculate the loa
 - Bound `strace` by syscall set, duration, and output size.
 - Use `perf` only if the target kernel permits it and the experiment needs sampling.
 - Do not disable ASLR, ptrace restrictions, watchdogs, or security settings globally for convenience.
+- IL2CPP builds strip unused managed methods, including common engine getters. Confirm probe methods in a method map or resolve them with null checks so a missing method cannot abort the application.
 
 ## Ghidra, radare2/r2, Rizin, and binary inspection
 
