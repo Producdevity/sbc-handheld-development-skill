@@ -33,6 +33,17 @@ measured AmberELEC 4.4.189 image. Its gdb 11.1 aborts (`linux-nat.c:1720`
 internal error) when repeatedly continuing `catch signal SIGSEGV` stops in a
 process that pages through SIGSEGV; log such faults in-process instead.
 
+Handlers that page memory through SIGSEGV must match the address against owned
+pages rather than trust `si_code`: the Miyoo Flip's Rockchip 5.10 kernel reports
+PROT_NONE accesses from multithreaded processes as `SEGV_MAPERR`, while other
+measured kernels and single-threaded tests report `SEGV_ACCERR`. Test with a
+second thread running.
+
+In JNI shims, do not raise a Java exception where Android's real method cannot
+fail. Engine worker threads may never clear it, and later JNI calls on that
+thread then return null far from the cause; log `ExceptionCheck` hits with the
+thread name to find the source.
+
 Use `target remote` for a program started or attached by gdbserver. Use `target extended-remote` for multi mode. Keep the target-side process under the normal frontend when investigating frontend-dependent behavior; attaching may be safer than relaunching it outside that lifecycle.
 
 If TCP is unavoidable, restrict it outside gdbserver with a firewall or isolated network, verify the actual listener with `ss` or an equivalent tool, and close it immediately after the bounded session. Do not infer the bind address from the `HOST:PORT` argument.
