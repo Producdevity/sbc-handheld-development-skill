@@ -162,4 +162,6 @@ restoration. Removing installations, resetting user/setup state, touching
 unrelated processes or changing firmware needs separate authorization when
 outside that scope. Keep temporary tools under the target's `/tmp` or the
 app's directory; system-package installation follows the skill's authorization
-rules.
+rules. On many CFWs `/tmp` is RAM-backed tmpfs: keep only small helpers there,
+remove test binaries and fixtures after use, and record `MemAvailable` before
+memory-sensitive runs so leftover files cannot skew them.
