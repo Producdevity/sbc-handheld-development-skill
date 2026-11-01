@@ -66,6 +66,14 @@ value through PortMaster and inspect the application's process environment when
 controller semantics matter. A mapping observed in an SSH shell is not proof
 of what the application inherited.
 
+On a measured Batocera 42 RG40XX-H build, evemu was absent; `input_event`
+records written to the built-in controller's evdev node (`event1`) reached
+EmulationStation, the PortMaster LÖVE patcher and SDL ports. ES's
+`es_input.cfg` pairs each SDL button index (`id`) with its evdev `code`: SDL
+`a` in PortMaster's generated `/tmp/gamecontrollerdb.txt` was index 4, code 305,
+while ES's own `a` was 304. `fbgrab` captured a fullscreen GLES port on that
+build; its loading frames were black.
+
 ## Silence audio
 
 The volume path is `knulli-audio setSystemVolume`, which sets the PulseAudio
