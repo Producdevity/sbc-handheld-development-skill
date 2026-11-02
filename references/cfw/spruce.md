@@ -109,7 +109,8 @@ Spruce warning with a countdown; B quits, A confirms.
 For screenshots, prefer KMS capture through Spruce's bundled FFmpeg. The
 generic `fbgrab` may see a stale or unused framebuffer.
 [`capture_screen.sh`](../../scripts/capture_screen.sh) tries Spruce's installed
-Flip helper, then a BGRA KMS download when its pixel format is incompatible.
+Flip helper (BGRA for ARGB), then a BGR0 KMS download for XRGB planes. On
+SpruceOS 4.5.6, GreenOvercast used XR24/XRGB8888: BGRA failed, BGR0 succeeded.
 PortMaster can own DRM directly; on the measured build both KMS capture and
 `fbgrab` returned black while the process and initialization log were healthy.
 That is runtime evidence, not rendering proof. With PortMaster 2026.10.01-0433,

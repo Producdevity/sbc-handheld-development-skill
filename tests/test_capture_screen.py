@@ -37,7 +37,7 @@ def read_rgb(path):
 
 
 class CaptureScreenTest(unittest.TestCase):
-    def test_auto_uses_spruce_kms_with_bgra_fallback(self):
+    def test_auto_uses_spruce_kms_with_xrgb_fallback(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             temp = Path(temp_dir)
             bin_dir = temp / "bin"
@@ -54,7 +54,11 @@ case "$command" in
   *"echo spruce-kms"*) printf 'spruce-kms\\n' ;;
   *"[ -x /mnt/SDCARD/spruce/flip/screenshot.sh ]"*) exit 0 ;;
   *"/mnt/SDCARD/spruce/flip/screenshot.sh"*) exit 1 ;;
-  *"/mnt/SDCARD/spruce/flip/arm64-ffmpeg/bin/ffmpeg"*) exit 0 ;;
+  *"/mnt/SDCARD/spruce/flip/arm64-ffmpeg/bin/ffmpeg"*)
+    case "$command" in
+      *"hwdownload,format=bgr0"*) exit 0 ;;
+      *) exit 1 ;;
+    esac ;;
   *"rm -f"*) exit 0 ;;
   *) printf 'unexpected ssh command: %s\\n' "$command" >&2; exit 1 ;;
 esac
@@ -91,7 +95,7 @@ cp "$CAPTURE_FIXTURE" "$destination"
 
             self.assertEqual(read_rgb(output), (2, (24, 96, 144)))
             self.assertIn("captured method=spruce-kms", result.stdout)
-            self.assertIn("hwdownload,format=bgra", Path(env["SSH_LOG"]).read_text())
+            self.assertIn("hwdownload,format=bgr0", Path(env["SSH_LOG"]).read_text())
 
     def test_forced_fbgrab_accepts_spruce_bundled_binary(self):
         with tempfile.TemporaryDirectory() as temp_dir:

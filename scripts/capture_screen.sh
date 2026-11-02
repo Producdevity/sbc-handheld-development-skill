@@ -93,7 +93,7 @@ case "$method" in
       exit 1
     fi
     if ! ssh "$host" "/mnt/SDCARD/spruce/flip/screenshot.sh '$remote' >/dev/null 2>&1"; then
-      ssh "$host" "rm -f '$remote'; LD_LIBRARY_PATH=/mnt/SDCARD/spruce/flip/lib:/usr/lib:/lib/:/mnt/SDCARD/spruce/flip/arm64-ffmpeg/bin /mnt/SDCARD/spruce/flip/arm64-ffmpeg/bin/ffmpeg -nostdin -hide_banner -loglevel error -f kmsgrab -device /dev/dri/card0 -i - -vf 'hwdownload,format=bgra' -frames:v 1 -y '$remote'"
+      ssh "$host" "rm -f '$remote'; LD_LIBRARY_PATH=/mnt/SDCARD/spruce/flip/lib:/usr/lib:/lib/:/mnt/SDCARD/spruce/flip/arm64-ffmpeg/bin /mnt/SDCARD/spruce/flip/arm64-ffmpeg/bin/ffmpeg -nostdin -hide_banner -loglevel error -f kmsgrab -device /dev/dri/card0 -i - -vf 'hwdownload,format=bgr0' -frames:v 1 -y '$remote'"
     fi
     ;;
   fbgrab)
