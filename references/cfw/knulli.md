@@ -13,7 +13,11 @@ SSH:
 
 1. `curl -s -m 3 http://127.0.0.1:1234/isIdle` must return `[ true ]`.
 2. After installing or renaming an item, `GET /reloadgames`; it runs
-   asynchronously on the UI thread.
+   asynchronously on the UI thread. It first writes unsaved metadata (play
+   counts after a launch) over `gamelist.xml`, replacing a hand edit of that
+   entry. Reload once, edit the file, then reload again. An SSH install gets no
+   cover or description: PortMaster's installer merges the port's
+   `gameinfo.xml` into the gamelist.
 3. `curl -s -m 5 -d '/userdata/roms/ports/<Name>.sh' http://127.0.0.1:1234/launch`.
    The body must equal a loaded gamelist entry's full or relative path. A match
    is launched on the UI thread through the normal launcher. An unknown path
