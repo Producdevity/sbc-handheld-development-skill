@@ -176,3 +176,7 @@ Store a sanitized, versioned target record with:
 - capture method and frontend restoration evidence.
 
 Treat the record as a measured example. Recheck drift-prone paths and mappings after every firmware or PortMaster update.
+
+## Two cards
+
+PortMaster installs to `/mnt/sdcard/ports` and `/mnt/sdcard/ROMS/Ports` when a second card is mounted, unless `MUOS/PortMaster/config/muos_mmc_master_race.txt` exists (harbourmaster `config.py`, muOS 2508.4). `control.txt` sets `directory` from the launcher's real path, while `/mnt/union` shows both cards' ports as one list. A file a user copied to the other card is not in `GAMEDIR`, so setup errors should print the absolute folder they read.
