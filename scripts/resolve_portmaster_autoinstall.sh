@@ -28,7 +28,8 @@ if [ -z "$queue" ]; then
     /roms2/ports/PortMaster \
     /storage/roms/ports/PortMaster; do
     case "$base" in /*) ;; *) continue ;; esac
-    [ -r "$base/control.txt" ] || continue
+    # muOS also keeps a lone control.txt in /roms/ports/PortMaster; only the real install has harbourmaster.
+    [ -r "$base/control.txt" ] && [ -f "$base/harbourmaster" ] || continue
     if [ -n "$selected" ]; then
       [ "$base" -ef "$selected" ] && continue
       printf 'Multiple PortMaster installations: %s and %s. Pass an explicit autoinstall directory.\n' \

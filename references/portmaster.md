@@ -94,7 +94,9 @@ for bounded, read-only discovery on the target:
 ssh -o BatchMode=yes -o ConnectTimeout=8 HOST sh -s < "$SKILL_DIR/scripts/resolve_portmaster_autoinstall.sh"
 ```
 
-It checks known installation directories for a readable `control.txt`, treats
+It checks known installation directories for a readable `control.txt` next to
+`harbourmaster` (muOS also keeps a lone `control.txt` in
+`/roms/ports/PortMaster`), treats
 symlink/bind-mount aliases of the same installation as one, and returns its
 existing writable `autoinstall` queue. It does not source `control.txt`, run
 device-info probes, create directories, or launch anything. Multiple distinct

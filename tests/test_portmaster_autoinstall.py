@@ -30,6 +30,7 @@ class PortMasterAutoinstallTest(unittest.TestCase):
         base = self.root / location.lstrip("/")
         base.mkdir(parents=True)
         (base / "control.txt").write_text('echo "control.txt must not execute" >&2; exit 99\n')
+        (base / "harbourmaster").write_text('echo "harbourmaster must not execute" >&2; exit 99\n')
         if queue:
             (base / "autoinstall").mkdir()
         return base
@@ -57,6 +58,7 @@ class PortMasterAutoinstallTest(unittest.TestCase):
                 self.assertEqual(result.stderr, "")
                 (base / "autoinstall").rmdir()
                 (base / "control.txt").unlink()
+                (base / "harbourmaster").unlink()
 
     def test_remote_xdg_data_home(self):
         base = self.install("custom/data/PortMaster")
@@ -82,6 +84,15 @@ class PortMasterAutoinstallTest(unittest.TestCase):
         result = self.resolve(second / "autoinstall")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(result.stdout.strip(), str(second / "autoinstall"))
+
+    def test_lone_control_file_is_not_an_installation(self):
+        base = self.install("/mnt/mmc/MUOS/PortMaster")
+        lone = self.root / "roms/ports/PortMaster"
+        lone.mkdir(parents=True)
+        (lone / "control.txt").write_text("exit 99\n")
+        result = self.resolve()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout.strip(), str(base / "autoinstall"))
 
     def test_custom_queue_does_not_require_standard_installation(self):
         queue = self.root / "custom" / "autoinstall"
