@@ -95,10 +95,10 @@ Cortex-A53 stall attribution (implementation events, TRM): `0xE1` issue queue em
 I-cache miss, `0xE2` on an I-uTLB miss, `0xE7` Wr stall on a load miss, `0xE8` on a store,
 `0xE4`-`0xE6` interlocks. A55 numbers differ.
 
-On Bifrost libmali (r20p0, g2p0), a GPU write (transform feedback, `glCopyBufferSubData`)
-into a buffer that queued draws read makes the calling thread wait for them; give such
-writes their own buffers. Each render pass costs hundreds of microseconds of driver CPU
-regardless of size.
+Bifrost libmali: a GPU write (transform feedback, `glCopyBufferSubData`) into a buffer that
+queued draws read made the calling thread wait for them (repro on g2p0; on r20p0 inferred from
+in-game gains when such writes moved to their own buffers). A render pass cost 100-300 us of
+driver CPU on r20p0 whatever its size.
 
 ## Clock controls
 
