@@ -95,7 +95,7 @@ ssh -o BatchMode=yes -o ConnectTimeout=8 HOST sh -s < "$SKILL_DIR/scripts/resolv
 ```
 
 It checks known installation directories for a readable `control.txt` next to
-`harbourmaster` (muOS also keeps a lone `control.txt` in
+`harbourmaster` (muOS 2601.0 also has a copy of `control.txt` alone in
 `/roms/ports/PortMaster`), treats
 symlink/bind-mount aliases of the same installation as one, and returns its
 existing writable `autoinstall` queue. It does not source `control.txt`, run

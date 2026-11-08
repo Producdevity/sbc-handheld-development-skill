@@ -13,9 +13,12 @@ SSH:
 
 1. `curl -s -m 3 http://127.0.0.1:1234/isIdle` must return `[ true ]`.
 2. After installing or renaming an item, `GET /reloadgames`; it runs
-   asynchronously on the UI thread. It first writes unsaved metadata (play
-   counts after a launch) over `gamelist.xml`, replacing a hand edit of that
-   entry. Reload once, edit the file, then reload again. An SSH install gets no
+   asynchronously on the UI thread. With `SaveGamelistsOnExit` on (default) it
+   first writes unsaved metadata (play counts after a launch) over
+   `gamelist.xml`
+   ([`deleteSystems`](https://github.com/knulli-cfw/batocera-emulationstation/blob/f7c5ae103815761ccd34bc55b021c6e150442c96/es-app/src/SystemData.cpp#L1223);
+   ROCKNIX's fork does the same), replacing a hand edit of that entry. Reload
+   once, edit the file, then reload again. An SSH install gets no
    cover or description: PortMaster's installer merges the port's
    `gameinfo.xml` into the gamelist.
 3. `curl -s -m 5 -d '/userdata/roms/ports/<Name>.sh' http://127.0.0.1:1234/launch`.
