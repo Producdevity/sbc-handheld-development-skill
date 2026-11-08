@@ -129,6 +129,9 @@ restarted (PyUI's stick calibration does this), the `getevent` processes of
 reboot. The game's threads then waited 20-40% of the time for a CPU. Per-thread
 `/proc/PID/task/TID/schedstat` shows run and runqueue-wait time.
 
+Under memory thrash (Miyoo Flip, 1 GB) SSH connections drop or stall; wrap
+remote calls in `timeout` and retry, and fetch run output as one archive.
+
 ## PyUI input recovery
 
 On the measured 4.1.2 build, PyUI read input only from `/dev/input/event5`. A

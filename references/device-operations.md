@@ -135,7 +135,7 @@ It uses `mufbset` only when the installed command advertises `-g`. For Sway it r
 - Bound `strace`, `perf`, packet capture, and verbose logs by duration and file size.
 - Never enable per-frame or per-packet logging for a long run unless sampling is the experiment.
 
-For short performance runs, record the process and thread IDs before sampling. `/proc/PID/task/*/stat`, `/proc/PID/status`, and `/proc/PID/smaps_rollup` are widely available, but their fields and permissions still need probing. Frame timing may come from a renderer swap hook, application instrumentation, or timestamped captures; record which clock and layer produced it.
+For short performance runs, record the process and thread IDs before sampling. `/proc/PID/task/*/stat`, `/proc/PID/status`, and `/proc/PID/smaps_rollup` are widely available, but their fields and permissions still need probing. In `stat`, the name in parentheses may contain spaces; split after the last `)` before counting fields (per-thread `majflt` and CPU time come from there). Frame timing may come from a renderer swap hook, application instrumentation, or timestamped captures; record which clock and layer produced it.
 
 ## Safe deployment
 
@@ -156,6 +156,14 @@ python3 hash_tree.py /path/to/data --compare before.json
 ```
 
 Use it to prove which files changed during setup or an update. Keep a separate backup for file contents, ownership, permissions, and extended attributes.
+
+Stopping a test app: SDL turns SIGTERM into a quit event, and a stalled
+shutdown keeps the process alive until its own exit path. Send TERM, wait about
+15 s, then KILL; harness steps that wait for the process to go must do the same.
+Over SSH, `pgrep -f` or `ps | grep` patterns also match the remote shell's own
+command line, including paths in it, so a kill loop can end its own session:
+use a bracket pattern (`[n]ame`) whose text appears nowhere else in the command.
+Do not edit a shell script while a running `sh` reads it; write a new file.
 
 Use existing task authorization for scoped test-app stops and frontend
 restoration. Removing installations, resetting user/setup state, touching

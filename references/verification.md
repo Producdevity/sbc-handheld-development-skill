@@ -46,6 +46,11 @@ Afterward record deviations and uncertainty. Do not silently rerun until one att
 
 When levels, spawns or routes vary between runs, steer scripted play by in-game feedback (for example depth or region) and compare normalized measures, such as cost per unit of work, alongside whole-run totals. Run memory-heavy device tests only while no trial owns the device; concurrent runs fail with misleading allocation errors.
 
+Arms switched by time within one session measure the scene as much as the change once the
+player moves. Compare memory or steady-state changes as whole sessions on the same scripted
+route, in interleaved pairs; switching such a setting mid-session (for example mlock) adds
+its own transient.
+
 ## Input gates
 
 Test separately:
@@ -70,12 +75,30 @@ Use application-visible results or SDL event traces. Raw evdev output alone prov
   (about 1 s each); a split there is a software tear, none means it is after the display
   engine.
 - Distinguish renderer cadence, game update cadence, input polling, and display refresh.
+- Diagnostic captures (readback plus PNG encoding) add to swap and render-thread time;
+  take timings from runs without them.
 - Retain numerical frame/queue/latency metrics for streaming or media work.
 
 Keep frequently polled diagnostic control files on a
 [verified tmpfs](https://docs.kernel.org/filesystems/tmpfs.html).
 Rate-limit or remove polling, including file open/close operations, during
 benchmarks. Validate a clean launch separately from the instrumented run.
+
+## Memory and CPU counters
+
+zram stores pages it cannot shrink uncompressed (`mm_stat` column 8, `huge_pages`, where
+present): swapping already-compressed data (block-compressed textures, compressed stores)
+frees nothing and costs a fault per touch. Keep such data resident (mlock) instead.
+Attribute major faults per thread before blaming one subsystem.
+
+Cortex-A53 stall attribution (implementation events, TRM): `0xE1` issue queue empty on an
+I-cache miss, `0xE2` on an I-uTLB miss, `0xE7` Wr stall on a load miss, `0xE8` on a store,
+`0xE4`-`0xE6` interlocks. A55 numbers differ.
+
+On Bifrost libmali (r20p0, g2p0), a GPU write (transform feedback, `glCopyBufferSubData`)
+into a buffer that queued draws read makes the calling thread wait for them; give such
+writes their own buffers. Each render pass costs hundreds of microseconds of driver CPU
+regardless of size.
 
 ## Clock controls
 

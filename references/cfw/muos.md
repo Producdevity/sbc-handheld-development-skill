@@ -135,6 +135,10 @@ input. Do not restart the loop with `FRONTEND stop`/`start` from SSH: the new
 `pgrep -x`: BusyBox matches `-x` against argv0, which is the full path, so
 `pgrep -x muxfrontend` (also used by `GET_FRONTEND_PIDS`) finds nothing.
 
+On 2601.0 (RG35XX-SP) `muxfrontend` sometimes ignores USR1 (main thread blocked
+in a futex). With `/tmp/rom_go` and `/tmp/safe_quit` staged, `kill -9` of
+`muxfrontend` lets `frontend.sh` run the loader.
+
 On an RG35XX-SP muOS build, `fbgrab` of an idle frontend can return a uniform white image. `/opt/muos/config/boot/last_play` then still names the last launched content, which the frontend highlights after that content exits; confirm the launched process hash after pressing confirm instead of trusting the highlight.
 
 After selection:
