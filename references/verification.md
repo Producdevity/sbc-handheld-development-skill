@@ -64,6 +64,11 @@ Use application-visible results or SDL event traces. Raw evdev output alone prov
 
 - Confirm capture source, timestamp, dimensions, and active display plane.
 - Use a video or repeated captures plus timestamps for animation/frame-pacing claims.
+- Framebuffer and KMS buffer captures read whole buffers and never show tearing. On
+  Allwinner BSP kernels (sunxi disp2), `echo /tmp/f.bmp >
+  /sys/class/disp/disp/attr/capture_dump` writes one frame of display-engine output
+  (about 1 s each); a split there is a software tear, none means it is after the display
+  engine.
 - Distinguish renderer cadence, game update cadence, input polling, and display refresh.
 - Retain numerical frame/queue/latency metrics for streaming or media work.
 
