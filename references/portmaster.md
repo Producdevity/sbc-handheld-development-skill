@@ -68,6 +68,8 @@ Use `$ESUDO` instead of hardcoding `sudo`. Use `bind_directories` or `bind_files
 
 Use native SDL game-controller input when the application supports it. Use gptokeyb for keyboard/mouse translation, controller emulation, text entry, or a managed exit chord. A `.gptk` mapping describes the game's logical actions. The firmware and PortMaster provide the physical-device mapping.
 
+The gptokeyb exit chord (`doKillMode` in gptokeyb `src/util.cpp`, commit 5b1284e) runs `pkill -f` on the application, waits 3 s, then `pkill -9`. Save state on SIGTERM and exit within 3 s.
+
 ## Development deploys
 
 Prefer two explicit paths:
