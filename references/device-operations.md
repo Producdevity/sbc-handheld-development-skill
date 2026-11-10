@@ -63,6 +63,12 @@ the installed ROM path (commonly `/storage/roms`). PortMaster's `mod_ROCKNIX.txt
 
 Probe for the active screenshot helper and compositor socket. A framebuffer tool is not automatically valid for a Sway-composited application.
 
+Measured on RG40XX-H, ROCKNIX 20260801 (kernel 7.0.11, Panfrost, Mesa 26.1.2):
+- `GET /reloadgames` makes a newly copied port launchable.
+- `grim` captured fullscreen GLES games with `XDG_RUNTIME_DIR=/var/run/0-runtime-dir WAYLAND_DISPLAY=wayland-1`.
+- PortMaster's patcher waits for A twice before patching and once after it finishes. Ending the finished patcher's `love` process continues the launcher the same way.
+- A is `BTN_EAST` on `H700 Gamepad` (`/dev/input/event3`) under PortMaster's mapping (`a:b1`). Writing one press to that node advanced the patcher.
+
 ### SpruceOS on Miyoo Flip
 
 Read [the SpruceOS Miyoo Flip profile](cfw/spruce.md) for its PyUI lifecycle,
