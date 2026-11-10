@@ -112,3 +112,10 @@ Distinguish built, installed, frontend-launched, rendered, input-observed and
 physically verified results. State device/CFW coverage and remaining limits.
 A screenshot, process, signal log or host test does not prove stable gameplay
 or a performance improvement.
+
+## Maintaining this skill
+
+When work verifies a device, CFW or PortMaster fact this skill lacks or states
+wrongly, fix the most specific reference and commit it in this repository.
+Follow [CONTRIBUTING.md](CONTRIBUTING.md): only reproduced facts, scoped to the
+device and firmware build, written as briefly as the existing text.
