@@ -2,6 +2,8 @@
 
 Use the current upstream `PortMaster-New` instructions, PortMaster website documentation, `PortMaster-GUI` source, and recent accepted ports of the same engine/runtime. Installed CFW files win when they differ from upstream source.
 
+Read [PortMaster-New's AGENTS.md](https://github.com/PortsMaster/PortMaster-New/blob/main/AGENTS.md) before writing a launcher or package. Reviewers reject AI-built ports that break it without discussion.
+
 ## Package contract
 
 A new port normally has this shape:
@@ -27,7 +29,9 @@ Follow the exact current schema and builder rather than copying this sketch lite
 - no `.DS_Store`, nested duplicate payload, `.gitkeep`, build cache, or source-control metadata;
 - no raw file over the current PortMaster size limit;
 - exact architecture, resolution, availability, and runtime metadata;
-- launcher committed as a regular file; repair executable bits for shipped target binaries at launch when needed.
+- launcher committed as a regular file; repair executable bits for shipped target binaries at launch when needed;
+- launcher and patcher scripts free of one-CFW paths such as `/mnt/mmc`, `/storage/roms` or `ROMS/Ports`: derive paths from `$directory` and the game directory;
+- scripts no longer than recent accepted ports of the same type, with a reason for every non-standard line.
 
 Run PortMaster-New's current checks and official archive builder. Do not hand-build a zip if the project already integrates those tools.
 
