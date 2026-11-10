@@ -47,6 +47,12 @@ launcher helpers, and its BusyBox `pgrep -x` missed a 14-character name.
 `/storage/roms` is exFAT on that image, so `rsync -a` fails every `chown`
 (exit 23) while still copying the data. Use `rsync -rlt`.
 
+On the same image (Mali-G31 `r13p0`, GLES 3.2), `fbgrab` captured running
+fullscreen SDL GLES ports (Pikmin 2, and the Luigi's Mansion and Sunshine recomp
+ports) when taken at least 30 s after launch. PortMaster's patcher waits for A
+twice before patching. Writing one `BTN_EAST` press to `GO-Super Gamepad`
+(`/dev/input/event2`, `a:b1` in PortMaster's mapping) advanced it.
+
 New ports may need **Start -> Game Settings -> Update Gamelists** before
 appearing in the frontend.
 
