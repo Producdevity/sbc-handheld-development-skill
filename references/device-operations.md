@@ -68,6 +68,7 @@ Measured on RG40XX-H, ROCKNIX 20260801 (kernel 7.0.11, Panfrost, Mesa 26.1.2):
 - `grim` captured fullscreen GLES games with `XDG_RUNTIME_DIR=/var/run/0-runtime-dir WAYLAND_DISPLAY=wayland-1`.
 - PortMaster's patcher waits for A twice before patching and once after it finishes. Ending the finished patcher's `love` process continues the launcher the same way.
 - A is `BTN_EAST` on `H700 Gamepad` (`/dev/input/event3`) under PortMaster's mapping (`a:b1`). Writing one press to that node advanced the patcher.
+- Boot restores the volume from `audio.volume` in `/storage/.config/system/configs/system.cfg` (`/usr/lib/autostart/common/050-audio`); `wpctl set-volume` alone does not persist. Record and restore both. Check `amixer sget Master` and `wpctl get-volume @DEFAULT_AUDIO_SINK@` for a mute flag when a port is silent; a system mute also persisted across reboots.
 
 ### SpruceOS on Miyoo Flip
 
