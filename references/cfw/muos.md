@@ -31,7 +31,7 @@ muxfrontend/muxplore
   -> frontend resumes
 ```
 
-Verify every resolved path on the installed build. A measured MustardOS 2508.4 build (`BUILD_ID=a55cdbe8`) used `/tmp/rom_go`, `/tmp/con_go`, `settings/advanced/swap`, and `ext-general.sh`. The pinned upstream snapshots linked below instead used `/run/muos/content`, `/run/muos/controller`, and `settings/remap/layout`. This drift is why remembered request formats and settings must not be written or treated as stable APIs.
+Verify every resolved path on the installed build. A measured MustardOS 2508.4 build (`BUILD_ID=a55cdbe8`) used `/tmp/rom_go`, `/tmp/con_go`, `settings/advanced/swap`, and `ext-general.sh`. The pinned upstream snapshots linked below and a measured 2606.0 build (RG35XX-H, 2026-11-13) instead use `/run/muos/content`, `/run/muos/controller`, and `settings/remap/layout`. This drift is why remembered request formats and settings must not be written or treated as stable APIs.
 
 Official upstream references:
 
@@ -134,6 +134,14 @@ input. Do not restart the loop with `FRONTEND stop`/`start` from SSH: the new
 `frontend.sh` inherits the SSH environment. Use `pidof muxfrontend`, not
 `pgrep -x`: BusyBox matches `-x` against argv0, which is the full path, so
 `pgrep -x muxfrontend` (also used by `GET_FRONTEND_PIDS`) finds nothing.
+
+On 2606.0 (RG35XX-H, 2026-11-13) the same loader takes its request from
+`/run/muos/content`, `/run/muos/governor`, `/run/muos/controller` and
+`/run/muos/safe_quit`, and the content configs live under
+`/opt/muos/share/info/content/<System>/<Name>.cfg`. Writing `/tmp/rom_go` there
+launches nothing. Gate on `[ ! -s /run/muos/content ]` instead of `/tmp/rom_go`.
+The launched port's SDL read the pad from the `muOS-Keys` node (event3 on that
+build), so measure the node by name before injecting.
 
 On 2601.0 (RG35XX-SP) `muxfrontend` sometimes ignores USR1 (main thread blocked
 in a futex). With `/tmp/rom_go` and `/tmp/safe_quit` staged, `kill -9` of
