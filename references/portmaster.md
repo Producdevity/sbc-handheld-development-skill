@@ -61,6 +61,7 @@ Use `$ESUDO` instead of hardcoding `sudo`. Use `bind_directories` or `bind_files
 - Bundle a library only after `readelf`/`ldd` and target evidence show that supported CFWs do not provide a compatible one.
 - Record provenance and license terms for patches, runtimes, libraries, and assets.
 - Keep 32-bit and 64-bit dependencies separate and verify the interpreter and symbol-version requirements.
+- For an in-game settings menu or a performance overlay (fps, frame time, CPU/GPU load, temperatures), use [sbc-port-overlay](https://github.com/Producdevity/sbc-port-overlay). It is a static C library with a C ABI: the port passes SDL events to it and calls it right before each buffer swap. Add it only when the user asks for one.
 
 ## Controls
 
