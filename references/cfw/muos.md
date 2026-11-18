@@ -141,9 +141,13 @@ On 2606.0 (RG35XX-H, 2026-11-13) the same loader takes its request from
 `/opt/muos/share/info/content/<System>/<Name>.cfg`. Writing `/tmp/rom_go` there
 launches nothing. Gate on `[ ! -s /run/muos/content ]` instead of `/tmp/rom_go`.
 The launched port's SDL read the pad from the `muOS-Keys` node (event3 on that
-build), so measure the node by name before injecting. Its capabilities there
-include 314/315 (`BTN_SELECT`/`BTN_START`) and `ABS_HAT0X`/`ABS_HAT0Y` (D-pad).
-`muOS-Input-Source` lists handler event1 but has no `/dev/input/event1` node.
+build), so measure the node by name before injecting. There the system SDL
+2.28.5 numbers muOS-Keys buttons in ascending key-code order, not upstream's
+`BTN_JOYSTICK`-first order: 304=`b`, 305=`a`, 308=`x`, 314=`back`, 315=`start`,
+316=`guide`; `ABS_HAT0X`/`ABS_HAT0Y` is the D-pad. Holding 314+315 makes gptokeyb
+exit the port to the frontend; that exit also ended the injecting SSH session and
+left both keys held, so release them from a new session. `muOS-Input-Source`
+lists handler event1 but has no `/dev/input/event1` node.
 On 2601.0 (RG35XX-SP), `muOS-Keys` was
 event1 and key 312 reached a port as SDL `guide` (the Menu key).
 
