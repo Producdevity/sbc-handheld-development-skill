@@ -141,8 +141,11 @@ On 2606.0 (RG35XX-H, 2026-11-13) the same loader takes its request from
 `/opt/muos/share/info/content/<System>/<Name>.cfg`. Writing `/tmp/rom_go` there
 launches nothing. Gate on `[ ! -s /run/muos/content ]` instead of `/tmp/rom_go`.
 The launched port's SDL read the pad from the `muOS-Keys` node (event3 on that
-build), so measure the node by name before injecting. On 2601.0 (RG35XX-SP),
-`muOS-Keys` was event1 and key 312 reached a port as SDL `guide` (the Menu key).
+build), so measure the node by name before injecting. Its capabilities there
+include 314/315 (`BTN_SELECT`/`BTN_START`) and `ABS_HAT0X`/`ABS_HAT0Y` (D-pad).
+`muOS-Input-Source` lists handler event1 but has no `/dev/input/event1` node.
+On 2601.0 (RG35XX-SP), `muOS-Keys` was
+event1 and key 312 reached a port as SDL `guide` (the Menu key).
 
 On 2601.0 (RG35XX-SP) `muxfrontend` sometimes ignores USR1 (main thread blocked
 in a futex). With `/tmp/rom_go` and `/tmp/safe_quit` staged, `kill -9` of
