@@ -141,13 +141,14 @@ On 2606.0 (RG35XX-H, 2026-11-13) the same loader takes its request from
 `/opt/muos/share/info/content/<System>/<Name>.cfg`. Writing `/tmp/rom_go` there
 launches nothing. Gate on `[ ! -s /run/muos/content ]` instead of `/tmp/rom_go`.
 The launched port's SDL read the pad from the `muOS-Keys` node (event3 on that
-build), so measure the node by name before injecting.
+build), so measure the node by name before injecting. On 2601.0 (RG35XX-SP),
+`muOS-Keys` was event1 and key 312 reached a port as SDL `guide` (the Menu key).
 
 On 2601.0 (RG35XX-SP) `muxfrontend` sometimes ignores USR1 (main thread blocked
 in a futex). With `/tmp/rom_go` and `/tmp/safe_quit` staged, `kill -9` of
 `muxfrontend` lets `frontend.sh` run the loader.
 
-On an RG35XX-SP muOS build, `fbgrab` of an idle frontend can return a uniform white image. `/opt/muos/config/boot/last_play` then still names the last launched content, which the frontend highlights after that content exits; confirm the launched process hash after pressing confirm instead of trusting the highlight.
+On an RG35XX-SP muOS build, `fbgrab` of an idle frontend can return a uniform white image. On 2601.0 a white `fbgrab` of PortMaster's patcher had alpha 0 everywhere; dropping alpha (`ffmpeg -i in.png -vf format=rgb24 out.png`) showed the screen. `/opt/muos/config/boot/last_play` then still names the last launched content, which the frontend highlights after that content exits; confirm the launched process hash after pressing confirm instead of trusting the highlight.
 
 After selection:
 

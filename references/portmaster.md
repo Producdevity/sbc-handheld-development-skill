@@ -71,6 +71,8 @@ Use native SDL game-controller input when the application supports it. Use gptok
 
 The gptokeyb exit chord (`doKillMode` in gptokeyb `src/util.cpp`, commit 5b1284e) runs `pkill -f` on the application, waits 3 s, then `pkill -9`. Save state on SIGTERM and exit within 3 s.
 
+Launchers start `$GPTOKEYB "name.aarch64"`, so `pgrep -f name.aarch64` also matches gptokeyb. Match the game itself with `^./name.aarch64`.
+
 ## Development deploys
 
 Prefer two explicit paths:
