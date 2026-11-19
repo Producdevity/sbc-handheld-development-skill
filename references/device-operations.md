@@ -154,9 +154,11 @@ Before copying:
 1. identify the exact target root and existing installation;
 2. compare local and installed hashes;
 3. identify user-owned configs, saves, APK/game data, credentials, and logs;
-4. stage the new files beside the destination;
+4. stage the new files beside the destination, except in folders the frontend scans for games;
 5. replace only project-owned files;
-6. verify hashes and permissions after installation.
+6. verify hashes and permissions after installation, then remove staged copies and backups.
+
+Frontends list files in their ROM and ports folders as entries: muOS showed a leftover `Party Board (Starlet).sh.prev` in `ROMS/Ports` as a second "Party Board" game. Keep launcher backups and staged copies outside those folders.
 
 [`hash_tree.py`](../scripts/hash_tree.py) creates a sorted SHA-256 manifest that includes files, directories, and symlinks:
 
