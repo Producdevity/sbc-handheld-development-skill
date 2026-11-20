@@ -162,6 +162,8 @@ Before copying:
 
 Frontends list files in their ROM and ports folders as entries: muOS showed a leftover `Party Board (Starlet).sh.prev` in `ROMS/Ports` as a second "Party Board" game. Keep launcher backups and staged copies outside those folders.
 
+A test install must not link into a user's install. A BioShock test folder that symlinked the installed binary and game data ran from the installed folder, because the loader resolves its root from the real path of its executable. It loaded and rewrote the user's working save. Copy the files, or set the root explicitly. Before the first launch, confirm from a log line that saves and config resolve inside the test folder.
+
 [`hash_tree.py`](../scripts/hash_tree.py) creates a sorted SHA-256 manifest that includes files, directories, and symlinks:
 
 ```sh
